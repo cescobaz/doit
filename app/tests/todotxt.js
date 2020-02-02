@@ -1,5 +1,6 @@
 const TodoTXT = require('../todotxt')
 const todotxt = new TodoTXT()
+const assert = require('assert')
 
 describe('todotxt core', function () {
   it('only simple description', function () {
@@ -15,7 +16,6 @@ describe('todotxt core', function () {
       extraMetadata: {}
     }
     const task = todotxt.parse(line)
-
-    expect(expectedTask).toBe(task)
+    assert.strictEqual(task, expectedTask)
   })
 })
