@@ -79,6 +79,20 @@ describe('todotxt core', function () {
     }
     parseTest(line, expectedTask)
   })
+  it('completed task with creation date and priority', function () {
+    const line = 'x (A) 2020-02-20 2020-02-01 Buy some food'
+    const expectedTask = {
+      done: true,
+      priority: '(A)',
+      completionDate: new Date('2020-02-20T00:00:00Z'),
+      creationDate: new Date('2020-02-01T00:00:00Z'),
+      description: 'Buy some food',
+      projects: [],
+      contexts: [],
+      extraMetadata: {}
+    }
+    parseTest(line, expectedTask)
+  })
   it('priority and simple description', function () {
     const line = '(A) Buy some food'
     const expectedTask = {
