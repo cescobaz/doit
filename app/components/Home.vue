@@ -5,6 +5,7 @@
         ios.systemIcon="4"
         android.systemIcon=""
         ios.position="right"
+        @tap="selectFile"
       />
     </ActionBar>
     <ListView for="task in tasks">
@@ -24,6 +25,18 @@ export default {
     },
     message() {
       return "Blank {N}-Vue app";
+    }
+  },
+  methods: {
+    selectFile(event) {
+      console.log("open file");
+      const controller = new UIDocumentBrowserViewController();
+      const windows = UIApplication.sharedApplication.windows;
+      windows.lastObject.rootViewController.presentViewControllerAnimatedCompletion(
+        controller,
+        true,
+        () => {}
+      );
     }
   }
 };
