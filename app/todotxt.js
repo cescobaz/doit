@@ -38,7 +38,7 @@ TodoTXT.prototype.parse = function parse (line) {
     completionDate: done ? firstDate : null,
     creationDate: done ? secondDate : (secondDate || firstDate),
     description,
-    ...this.parseDescription(description)
+    ...parseDescription(description)
   }
 }
 
@@ -63,7 +63,7 @@ function parseDescriptionMetadata (regex) {
   }
 }
 
-TodoTXT.prototype.parseDescription = function parseDescription (description) {
+function parseDescription (description) {
   const projects = parseDescriptionTags(description, /(\+\w+)/g)
   const contexts = parseDescriptionTags(description, /(@\w+)/g)
   const extraMetadata = parseDescriptionMetadata(/(\w+):(\w+)/g)(description)

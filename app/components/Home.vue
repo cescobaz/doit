@@ -1,8 +1,6 @@
 <template>
   <Page>
-    <ActionBar>
-      <Label text="Home"></Label>
-    </ActionBar>
+    <ActionBar title="doit" />
     <ListView for="task in tasks">
       <v-template>
         <Label :text="task.description" />
@@ -12,17 +10,17 @@
 </template>
 
 <script>
-import TodoTXT from '../todotxt'
+import TodoTXT from "../todotxt";
 export default {
   computed: {
-    tasks () {
-      return [{ description: 'prova' }]
+    tasks() {
+      return [{ description: "prova" }];
     },
-    message () {
-      return 'Blank {N}-Vue app'
+    message() {
+      return "Blank {N}-Vue app";
     }
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
