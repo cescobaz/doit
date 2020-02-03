@@ -1,11 +1,19 @@
 'use strict'
+const fs = require('fs')
 
 function TodoTXT () {
 }
 
-TodoTXT.prototype.load = function load (filePath) {
-
+TodoTXT.prototype.load = function load (filePath, encoding, callback) {
+  fs.readFile(filePath, encoding, function (error, content) {
+    if (error) {
+      return callback(error)
+    }
+    const tasks = content.split('\n').map(this.parse.bind(this))
+    callback(null, tasks)
+  })
 }
+
 function trimOrNull (text) {
   if (text === undefined || text === null) {
     return null
