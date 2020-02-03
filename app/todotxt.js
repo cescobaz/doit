@@ -31,13 +31,31 @@ TodoTXT.prototype.parse = function parse (line) {
   }
 }
 
-TodoTXT.prototype.parseDescription = function parseDescription (description) {
-  const projects = /(\+\w+)/g.exec(description) || []
-  if (projects.length > 0) {
-    projects.splice(0, 1)
+function parseDescriptionTags (description, regex) {
+  const matches = regex.exec(description)
+  if (!matches) {
+    return []
   }
-  const contexts = []
-  const extraMetadata = {}
+  return [matches[1]].concat(parseDescriptionTags(description, regex))
+}
+
+function parseDescriptionMetadata (regex) {
+  return function parseDescriptionMetadataRec (description) {
+    const matches = regex.exec(description)
+    if (!matches) {
+      return {}
+    }
+    return {
+      [matches[1]]: matches[2],
+      ...parseDescriptionMetadataRec(description)
+    }
+  }
+}
+
+TodoTXT.prototype.parseDescription = function parseDescription (description) {
+  const projects = parseDescriptionTags(description, /(\+\w+)/g)
+  const contexts = parseDescriptionTags(description, /(@\w+)/g)
+  const extraMetadata = parseDescriptionMetadata(/(\w+):(\w+)/g)(description)
   return {
     projects,
     contexts,

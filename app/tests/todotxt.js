@@ -4,7 +4,7 @@ const { assert } = require('chai')
 
 function parseTest (input, expectedOutput) {
   const output = todotxt.parse(input)
-  assert.deepEqual(output, expectedOutput)
+  assert.deepEqual(output, expectedOutput, JSON.stringify(output))
 }
 
 describe('todotxt core', function () {
@@ -104,6 +104,76 @@ describe('todotxt core', function () {
       projects: ['+food'],
       contexts: [],
       extraMetadata: {}
+    }
+    parseTest(line, expectedTask)
+  })
+  it('two project', function () {
+    const line = 'Buy some +food for +home'
+    const expectedTask = {
+      done: false,
+      priority: null,
+      completionDate: null,
+      creationDate: null,
+      description: 'Buy some +food for +home',
+      projects: ['+food', '+home'],
+      contexts: [],
+      extraMetadata: {}
+    }
+    parseTest(line, expectedTask)
+  })
+  it('two project and one context', function () {
+    const line = 'Buy some +food for +home @betterLife'
+    const expectedTask = {
+      done: false,
+      priority: null,
+      completionDate: null,
+      creationDate: null,
+      description: 'Buy some +food for +home @betterLife',
+      projects: ['+food', '+home'],
+      contexts: ['@betterLife'],
+      extraMetadata: {}
+    }
+    parseTest(line, expectedTask)
+  })
+  it('two project and three context', function () {
+    const line = 'Buy some +food for +home @betterLife @yeah and @cool'
+    const expectedTask = {
+      done: false,
+      priority: null,
+      completionDate: null,
+      creationDate: null,
+      description: 'Buy some +food for +home @betterLife @yeah and @cool',
+      projects: ['+food', '+home'],
+      contexts: ['@betterLife', '@yeah', '@cool'],
+      extraMetadata: {}
+    }
+    parseTest(line, expectedTask)
+  })
+  it('completed task with two project and three context', function () {
+    const line = 'x Buy some +food for +home @betterLife @yeah and @cool'
+    const expectedTask = {
+      done: true,
+      priority: null,
+      completionDate: null,
+      creationDate: null,
+      description: 'Buy some +food for +home @betterLife @yeah and @cool',
+      projects: ['+food', '+home'],
+      contexts: ['@betterLife', '@yeah', '@cool'],
+      extraMetadata: {}
+    }
+    parseTest(line, expectedTask)
+  })
+  it('one extra metadata', function () {
+    const line = 'Buy some food due:tomorrow'
+    const expectedTask = {
+      done: false,
+      priority: null,
+      completionDate: null,
+      creationDate: null,
+      description: 'Buy some food due:tomorrow',
+      projects: [],
+      contexts: [],
+      extraMetadata: { due: 'tomorrow' }
     }
     parseTest(line, expectedTask)
   })
