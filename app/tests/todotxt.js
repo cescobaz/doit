@@ -1,6 +1,11 @@
 const TodoTXT = require('../todotxt')
 const todotxt = new TodoTXT()
-const assert = require('assert')
+const { assert } = require('chai')
+
+function parseTest (input, expectedOutput) {
+  const output = todotxt.parse(input)
+  assert.deepEqual(output, expectedOutput)
+}
 
 describe('todotxt core', function () {
   it('simple description', function () {
@@ -15,8 +20,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    const task = todotxt.parse(line)
-    assert.deepEqual(task, expectedTask)
+    parseTest(line, expectedTask)
   })
   it('completed task with simple description', function () {
     const line = 'x Buy some food'
@@ -30,8 +34,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    const task = todotxt.parse(line)
-    assert.deepEqual(task, expectedTask)
+    parseTest(line, expectedTask)
   })
 
   it('simple description starting with x (false completed)', function () {
@@ -46,8 +49,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    const task = todotxt.parse(line)
-    assert.deepEqual(task, expectedTask)
+    parseTest(line, expectedTask)
   })
   it('priority and simple description', function () {
     const line = '(A) Buy some food'
@@ -61,8 +63,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    const task = todotxt.parse(line)
-    assert.deepEqual(task, expectedTask)
+    parseTest(line, expectedTask)
   })
   it('wrong priority and simple description', function () {
     const line = '(a) Buy some food'
@@ -76,8 +77,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    const task = todotxt.parse(line)
-    assert.deepEqual(task, expectedTask)
+    parseTest(line, expectedTask)
   })
   it('completion date and simple description', function () {
     const line = '2020-12-31 Buy some food'
@@ -91,7 +91,20 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    const task = todotxt.parse(line)
-    assert.deepEqual(task, expectedTask)
+    parseTest(line, expectedTask)
+  })
+  it('one project', function () {
+    const line = 'Buy some +food'
+    const expectedTask = {
+      done: false,
+      priority: null,
+      completionDate: null,
+      creationDate: null,
+      description: 'Buy some +food',
+      projects: ['+food'],
+      contexts: [],
+      extraMetadata: {}
+    }
+    parseTest(line, expectedTask)
   })
 })
