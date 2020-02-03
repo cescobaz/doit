@@ -1,9 +1,15 @@
 <template>
   <Page>
-    <ActionBar title="doit" />
+    <ActionBar title="doit">
+      <ActionItem
+        ios.systemIcon="4"
+        android.systemIcon=""
+        ios.position="right"
+      />
+    </ActionBar>
     <ListView for="task in tasks">
       <v-template>
-        <Label :text="task.description" />
+        <Label class="task" :text="task.description" />
       </v-template>
     </ListView>
   </Page>
@@ -14,7 +20,7 @@ import TodoTXT from "../todotxt";
 export default {
   computed: {
     tasks() {
-      return [{ description: "prova" }];
+      return this.$store.state.tasks;
     },
     message() {
       return "Blank {N}-Vue app";
@@ -35,5 +41,10 @@ export default {
   font-size: 20;
   horizontal-align: center;
   vertical-align: center;
+}
+
+.task {
+  font-size: 20;
+  padding: 10;
 }
 </style>
