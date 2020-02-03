@@ -21,11 +21,14 @@ function dateFromString (text) {
 TodoTXT.prototype.parse = function parse (line) {
   const matches = /(x )?(\([A-Z]\) )?([0-9]{4}-[0-9]{2}-[0-9]{2} )?([0-9]{4}-[0-9]{2}-[0-9]{2} )?(.*)$/.exec(line)
   const description = matches[5]
+  const firstDate = dateFromString(matches[3])
+  const secondDate = dateFromString(matches[4])
+  const done = !!matches[1] && !!firstDate
   return {
-    done: !!matches[1],
+    done,
     priority: trimOrNull(matches[2]),
-    completionDate: dateFromString(matches[3]),
-    creationDate: matches[4] || null,
+    completionDate: done ? firstDate : null,
+    creationDate: done ? secondDate : (secondDate || firstDate),
     description,
     ...this.parseDescription(description)
   }
