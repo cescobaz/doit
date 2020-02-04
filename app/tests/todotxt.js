@@ -1,4 +1,4 @@
-const TodoTXT = require('../todotxt')
+const TodoTXT = require('../core/todotxt')
 const todotxt = new TodoTXT()
 const { assert } = require('chai')
 

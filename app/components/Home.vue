@@ -17,47 +17,27 @@
 </template>
 
 <script>
-import TodoTXT from "../todotxt";
-
-const DocumentPickerDelegate = NSObject.extend(
-  {
-    init() {
-      console.log("custom init delegate");
-      return super.init();
-    },
-    documentPickerDidPickDocumentsAtURLs(controller, urls) {
-      console.log("DAJEEE");
-      console.log("picked", urls);
-    }
-  },
-  {
-    name: "DocumentPickerDelegate",
-    protocols: [UIDocumentPickerDelegate]
-  }
-);
+import TodoTXT from "../core/todotxt";
+import { chooseFile, releaseToken } from "../core/file-ios";
 
 export default {
-  data: {},
+  data: {
+    chooseFileToken: null
+  },
   computed: {
     tasks() {
       return this.$store.state.tasks;
     }
   },
   methods: {
-    selectFile(event) {
-      const controller = UIDocumentPickerViewController.alloc().initWithDocumentTypesInMode(
-        NSArray.arrayWithArray([kUTTypeFolder, kUTTypeText]),
-        UIDocumentPickerModeOpen
-      );
-      controller.shouldShowFileExtensions = true;
-      const delegate = DocumentPickerDelegate.alloc().init();
-      controller.delegate = delegate;
-      const windows = UIApplication.sharedApplication.windows;
-      windows.lastObject.rootViewController.presentViewControllerAnimatedCompletion(
-        controller,
-        true,
-        () => {}
-      );
+    selectFile() {
+      if (this.chooseFileToken) {
+        return this.chooseFileToken(() => {
+          console.log("release finished");
+          this.chooseFileToken = chooseFile(console.log);
+        });
+      }
+      this.chooseFileToken = chooseFile(console.log);
     }
   }
 };
@@ -73,7 +53,6 @@ export default {
 
 .info {
   font-size: 20;
-  horizontal-align: center;
   vertical-align: center;
 }
 
