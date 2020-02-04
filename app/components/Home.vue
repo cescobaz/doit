@@ -18,19 +18,40 @@
 
 <script>
 import TodoTXT from "../todotxt";
+
+const DocumentPickerDelegate = NSObject.extend(
+  {
+    init() {
+      console.log("custom init delegate");
+      return super.init();
+    },
+    documentPickerDidPickDocumentsAtURLs(controller, urls) {
+      console.log("DAJEEE");
+      console.log("picked", urls);
+    }
+  },
+  {
+    name: "DocumentPickerDelegate",
+    protocols: [UIDocumentPickerDelegate]
+  }
+);
+
 export default {
+  data: {},
   computed: {
     tasks() {
       return this.$store.state.tasks;
-    },
-    message() {
-      return "Blank {N}-Vue app";
     }
   },
   methods: {
     selectFile(event) {
-      console.log("open file");
-      const controller = new UIDocumentBrowserViewController();
+      const controller = UIDocumentPickerViewController.alloc().initWithDocumentTypesInMode(
+        NSArray.arrayWithArray([kUTTypeFolder, kUTTypeText]),
+        UIDocumentPickerModeOpen
+      );
+      controller.shouldShowFileExtensions = true;
+      const delegate = DocumentPickerDelegate.alloc().init();
+      controller.delegate = delegate;
       const windows = UIApplication.sharedApplication.windows;
       windows.lastObject.rootViewController.presentViewControllerAnimatedCompletion(
         controller,
