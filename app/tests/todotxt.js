@@ -2,8 +2,8 @@ const TodoTXT = require('../core/todotxt')
 const todotxt = new TodoTXT()
 const { assert } = require('chai')
 
-function parseTest (input, expectedOutput) {
-  const output = todotxt.parse(input)
+function parseLineTest (input, expectedOutput) {
+  const output = todotxt.parseLine(input)
   assert.deepEqual(output, expectedOutput, JSON.stringify(output))
 }
 
@@ -20,7 +20,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
   it('simple description starting with x and space (false completed)', function () {
     const line = 'x Buy some food'
@@ -34,7 +34,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
 
   it('simple description starting with x (false completed)', function () {
@@ -49,7 +49,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
   it('completed task', function () {
     const line = 'x 2020-02-20 Buy some food'
@@ -63,7 +63,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
   it('completed task with creation date', function () {
     const line = 'x 2020-02-20 2020-02-01 Buy some food'
@@ -77,7 +77,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
   it('completed task with creation date and priority', function () {
     const line = 'x (A) 2020-02-20 2020-02-01 Buy some food'
@@ -91,7 +91,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
   it('priority and simple description', function () {
     const line = '(A) Buy some food'
@@ -105,7 +105,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
   it('wrong priority and simple description', function () {
     const line = '(a) Buy some food'
@@ -119,7 +119,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
   it('completion date and simple description', function () {
     const line = '2020-12-31 Buy some food'
@@ -133,7 +133,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
   it('one project', function () {
     const line = 'Buy some +food'
@@ -147,7 +147,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
   it('two project', function () {
     const line = 'Buy some +food for +home'
@@ -161,7 +161,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: {}
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
   it('two project and one context', function () {
     const line = 'Buy some +food for +home @betterLife'
@@ -175,7 +175,7 @@ describe('todotxt core', function () {
       contexts: ['@betterLife'],
       extraMetadata: {}
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
   it('two project and three context', function () {
     const line = 'Buy some +food for +home @betterLife @yeah and @cool'
@@ -189,7 +189,7 @@ describe('todotxt core', function () {
       contexts: ['@betterLife', '@yeah', '@cool'],
       extraMetadata: {}
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
   it('completed task with two project and three context', function () {
     const line = 'x 2020-02-20 Buy some +food for +home @betterLife @yeah and @cool'
@@ -203,7 +203,7 @@ describe('todotxt core', function () {
       contexts: ['@betterLife', '@yeah', '@cool'],
       extraMetadata: {}
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
   it('one extra metadata', function () {
     const line = 'Buy some food due:tomorrow'
@@ -217,7 +217,7 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: { due: 'tomorrow' }
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
   it('one extra metadata', function () {
     const line = 'Buy some food due:tomorrow'
@@ -231,6 +231,6 @@ describe('todotxt core', function () {
       contexts: [],
       extraMetadata: { due: 'tomorrow' }
     }
-    parseTest(line, expectedTask)
+    parseLineTest(line, expectedTask)
   })
 })

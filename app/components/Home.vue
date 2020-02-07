@@ -31,13 +31,19 @@ export default {
   },
   methods: {
     selectFile() {
+      function openFile(document) {
+        console.log("la fine, il document", document);
+        document.openWithCompletionHandler(success => {
+          console.log("openWithCompletionHandler", success);
+        });
+      }
       if (this.chooseFileToken) {
         return this.chooseFileToken(() => {
           console.log("release finished");
-          this.chooseFileToken = chooseFile(console.log);
+          this.chooseFileToken = chooseFile(openFile);
         });
       }
-      this.chooseFileToken = chooseFile(console.log);
+      this.chooseFileToken = chooseFile(openFile);
     }
   }
 };

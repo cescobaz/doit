@@ -1,5 +1,7 @@
 'use strict'
 
+const Document = require('./document-ios.js')
+
 const DocumentPickerDelegate = NSObject.extend(
   {
     init (callback) {
@@ -29,7 +31,11 @@ function chooseFile (callback) {
     UIDocumentPickerModeOpen
   )
   controller.shouldShowFileExtensions = true
-  const delegate = DocumentPickerDelegate.alloc().init(callback)
+  const createDocument = (documentCreated) => ({ nsURL }) => {
+    console.log('createDocument', nsURL)
+    documentCreated(Document.alloc().initWithFileURL(nsURL))
+  }
+  const delegate = DocumentPickerDelegate.alloc().init(createDocument(callback))
   controller.delegate = delegate
   const windows = UIApplication.sharedApplication.windows
   windows.lastObject.rootViewController.presentViewControllerAnimatedCompletion(

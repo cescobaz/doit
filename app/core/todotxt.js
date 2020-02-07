@@ -4,12 +4,15 @@ const fs = require('fs')
 function TodoTXT () {
 }
 
+TodoTXT.prototype.parse = function parse (text) {
+  return text.split('\n').map(this.parseLine)
+}
 TodoTXT.prototype.load = function load (filePath, encoding, callback) {
   fs.readFile(filePath, encoding, function (error, content) {
     if (error) {
       return callback(error)
     }
-    const tasks = content.split('\n').map(this.parse.bind(this))
+    const tasks = this.parse(content)
     callback(null, tasks)
   })
 }
@@ -26,7 +29,7 @@ function dateFromString (text) {
   }
   return new Date(`${text.trim()}T00:00:00Z`)
 }
-TodoTXT.prototype.parse = function parse (line) {
+TodoTXT.prototype.parseLine = function parseLine (line) {
   const matches = /(x )?(\([A-Z]\) )?([0-9]{4}-[0-9]{2}-[0-9]{2} )?([0-9]{4}-[0-9]{2}-[0-9]{2} )?(.*)$/.exec(line)
   const description = matches[5]
   const firstDate = dateFromString(matches[3])
