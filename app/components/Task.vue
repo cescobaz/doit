@@ -1,6 +1,6 @@
 <template>
   <Frame>
-    <Page>
+    <Page @loaded="focus">
       <ActionBar title="Task">
         <ActionItem
           ios.systemIcon="1"
@@ -18,7 +18,6 @@
       <StackLayout>
         <TextField
           ref="descriptionTextField"
-          focus="true"
           class="description"
           returnKeyType="done"
           v-model="description"
@@ -37,22 +36,10 @@ export default {
     description: null,
     creationDate: null
   },
-  mounted() {
-    this.$nextTick(() => {
-      try {
-        console.log("mounted", this.$refs.descriptionTextField);
-        console.log("mounte2", Object.keys(this.$refs.descriptionTextField));
-        this.$refs.descriptionTextField.nativeElement.focus();
-      } catch (error) {
-        console.log("mounted error", error);
-      }
-    });
-  },
   computed: {},
   methods: {
     focus() {
-      console.log(this.$refs.descriptionTextField);
-      this.$refs.descriptionTextField.focus();
+      this.$refs.descriptionTextField.nativeView.focus();
     },
     cancel() {
       this.$modal.close();
