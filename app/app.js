@@ -12,7 +12,9 @@ new Vue({
         <Frame>
             <Home />
         </Frame>`,
-
+  created: function created () {
+    this.$store.dispatch('loadDocument')
+  },
   components: {
     Home
   }

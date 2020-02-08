@@ -9,7 +9,6 @@ function store () {
     },
     mutations: {
       setDocument (state, document) {
-        console.log('setDocument', document, document.tasks)
         state.document = document
       }
     },

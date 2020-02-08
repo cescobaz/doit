@@ -2,7 +2,6 @@ const TodoTXT = require('./todotxt')
 
 const Document = UIDocument.extend({
   initWithFileURL (url) {
-    console.log('initWithFileURL', url, this, this.super)
     this.todotxt = new TodoTXT()
     return super.initWithFileURL(url)
   },
@@ -29,12 +28,20 @@ function storeBookmark (url) {
 
 function loadBookmark () {
   const data = NSUserDefaults.standardUserDefaults.dataForKey(todotxtBookmarkDataKey)
-  return NSURL.URLByResolvingBookmarkDataOptionsRelativeToURLBookmarkDataIsStaleError(bookmarkData, options, relativeURL, isStale)
+  const isStalePointer = interop.alloc(interop.sizeof(interop.types.bool))
+  const url = NSURL.URLByResolvingBookmarkDataOptionsRelativeToURLBookmarkDataIsStaleError(data, NSURLBookmarkCreationOptions.NSURLBookmarkCreationWithSecurityScope, null, isStalePointer)
+  const isStale = new interop.Reference(interop.types.bool, isStalePointer)[0]
+  if (isStale) {
+    console.log('[WARNING] isStale == true, I will re-store and re-load bookmark', isStalePointer, isStale)
+    storeBookmark(url)
+    return loadBookmark()
+  }
+  return url
 }
 
 function loadDocument (documentLoaded) {
   const url = loadBookmark()
-  loadDocumentWithURL(url)
+  loadDocumentWithURL(url, documentLoaded)
 }
 
 function loadDocumentWithURL (url, documentLoaded) {
@@ -43,7 +50,6 @@ function loadDocumentWithURL (url, documentLoaded) {
   }
   const document = Document.alloc().initWithFileURL(url)
   document.openWithCompletionHandler(success => {
-    console.log('openWithCompletionHandler', success, document.tasks)
     if (!success) {
       documentLoaded(null)
     }
