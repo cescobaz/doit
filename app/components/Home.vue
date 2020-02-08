@@ -2,10 +2,16 @@
   <Page>
     <ActionBar title="doit">
       <ActionItem
+        ios.systemIcon="10"
+        android.systemIcon=""
+        ios.position="left"
+        @tap="chooseDocument"
+      />
+      <ActionItem
         ios.systemIcon="4"
         android.systemIcon=""
         ios.position="right"
-        @tap="chooseDocument"
+        @tap="createTask"
       />
     </ActionBar>
     <ListView for="task in tasks">
@@ -36,7 +42,8 @@ export default {
     chooseDocument() {
       // TODO add initial url?
       this.$store.dispatch("chooseDocument");
-    }
+    },
+    createTask() {}
   }
 };
 </script>

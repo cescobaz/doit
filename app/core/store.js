@@ -20,6 +20,9 @@ function store () {
       },
       chooseDocument (context) {
         chooseDocument(document => {
+          if (!document) {
+            return
+          }
           context.commit('setDocument', document)
         })
       }

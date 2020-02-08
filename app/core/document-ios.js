@@ -46,7 +46,7 @@ function loadDocument (documentLoaded) {
 
 function loadDocumentWithURL (url, documentLoaded) {
   if (!url) {
-    documentLoaded(null)
+    return documentLoaded(null)
   }
   const document = Document.alloc().initWithFileURL(url)
   document.openWithCompletionHandler(success => {
