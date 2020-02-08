@@ -20,4 +20,36 @@ const Document = UIDocument.extend({
   name: 'Document'
 })
 
-module.exports = Document
+const todotxtBookmarkDataKey = 'todotxtBookmarkData'
+function storeBookmark (url) {
+  const data = url.bookmarkDataWithOptionsIncludingResourceValuesForKeysRelativeToURLError(
+    NSURLBookmarkCreationOptions.NSURLBookmarkCreationWithSecurityScope, [], null)
+  NSUserDefaults.standardUserDefaults.setObjectForKey(data, todotxtBookmarkDataKey)
+}
+
+function loadBookmark () {
+  const data = NSUserDefaults.standardUserDefaults.dataForKey(todotxtBookmarkDataKey)
+  return NSURL.URLByResolvingBookmarkDataOptionsRelativeToURLBookmarkDataIsStaleError(bookmarkData, options, relativeURL, isStale)
+}
+
+function loadDocument (documentLoaded) {
+  const url = loadBookmark()
+  loadDocumentWithURL(url)
+}
+
+function loadDocumentWithURL (url, documentLoaded) {
+  if (!url) {
+    documentLoaded(null)
+  }
+  const document = Document.alloc().initWithFileURL(url)
+  document.openWithCompletionHandler(success => {
+    console.log('openWithCompletionHandler', success, document.tasks)
+    if (!success) {
+      documentLoaded(null)
+    }
+    storeBookmark(url)
+    documentLoaded(document)
+  })
+}
+
+module.exports = { loadDocumentWithURL, loadDocument }

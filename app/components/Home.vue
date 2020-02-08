@@ -5,7 +5,7 @@
         ios.systemIcon="4"
         android.systemIcon=""
         ios.position="right"
-        @tap="selectFile"
+        @tap="chooseDocument"
       />
     </ActionBar>
     <ListView for="task in tasks">
@@ -18,7 +18,6 @@
 
 <script>
 import TodoTXT from "../core/todotxt";
-import { chooseFile, releaseToken } from "../core/file-ios";
 
 export default {
   data: {
@@ -26,25 +25,17 @@ export default {
   },
   computed: {
     tasks() {
-      return this.$store.state.tasks;
+      const document = this.$store.state.document;
+      if (!document) {
+        return [];
+      }
+      return document.tasks;
     }
   },
   methods: {
-    selectFile() {
-      function openFile(document) {
-        console.log("la fine, il document", document, this);
-        document.openWithCompletionHandler(success => {
-          console.log("openWithCompletionHandler", success);
-          this.$store.commit("setTasks", document.tasks);
-        });
-      }
-      if (this.chooseFileToken) {
-        return this.chooseFileToken(() => {
-          console.log("release finished");
-          this.chooseFileToken = chooseFile(openFile.bind(this));
-        });
-      }
-      this.chooseFileToken = chooseFile(openFile.bind(this));
+    chooseDocument() {
+      // TODO add initial url?
+      this.$store.dispatch("chooseDocument");
     }
   }
 };

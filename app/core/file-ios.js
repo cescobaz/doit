@@ -1,6 +1,6 @@
 'use strict'
 
-const Document = require('./document-ios.js')
+const { loadDocumentWithURL } = require('./document-ios.js')
 
 const DocumentPickerDelegate = NSObject.extend(
   {
@@ -12,8 +12,7 @@ const DocumentPickerDelegate = NSObject.extend(
       if (urls.count == 0) {
         return this.callback(null)
       }
-      const url = urls.firstObject
-      return this.callback({ filePath: url.absoluteString, nsURL: url })
+      return this.callback(urls.firstObject)
     },
     documentPickerWasCancelled (controller) {
       this.callback(null)
@@ -25,17 +24,13 @@ const DocumentPickerDelegate = NSObject.extend(
   }
 )
 
-function chooseFile (callback) {
+function chooseDocument (documentChoosen) {
   const controller = UIDocumentPickerViewController.alloc().initWithDocumentTypesInMode(
     NSArray.arrayWithArray([kUTTypeFolder, kUTTypeText]),
     UIDocumentPickerModeOpen
   )
   controller.shouldShowFileExtensions = true
-  const createDocument = (documentCreated) => ({ nsURL }) => {
-    console.log('createDocument', nsURL)
-    documentCreated(Document.alloc().initWithFileURL(nsURL))
-  }
-  const delegate = DocumentPickerDelegate.alloc().init(createDocument(callback))
+  const delegate = DocumentPickerDelegate.alloc().init(url => loadDocumentWithURL(url, documentChoosen))
   controller.delegate = delegate
   const windows = UIApplication.sharedApplication.windows
   windows.lastObject.rootViewController.presentViewControllerAnimatedCompletion(
@@ -57,4 +52,4 @@ function chooseFile (callback) {
   }
 }
 
-module.exports = { chooseFile }
+module.exports = { chooseDocument }

@@ -1,14 +1,28 @@
 const Vuex = require('vuex')
+const { chooseDocument } = require('./file-ios')
+const { loadDocument } = require('./document-ios')
 
 function store () {
   return new Vuex.Store({
     state: {
-      tasks: [{ description: 'from store!!!' }]
+      document: null
     },
     mutations: {
-      setTasks (state, tasks) {
-        console.log('setTasks', tasks)
-        state.tasks = tasks
+      setDocument (state, document) {
+        console.log('setDocument', document, document.tasks)
+        state.document = document
+      }
+    },
+    actions: {
+      loadDocument (context) {
+        loadDocument(document => {
+          context.commit('setDocument', document)
+        })
+      },
+      chooseDocument (context) {
+        chooseDocument(document => {
+          context.commit('setDocument', document)
+        })
       }
     }
   })
