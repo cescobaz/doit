@@ -17,14 +17,6 @@ function store () {
         loadDocument(document => {
           context.commit('setDocument', document)
         })
-      },
-      chooseDocument (context) {
-        chooseDocument(document => {
-          if (!document) {
-            return
-          }
-          context.commit('setDocument', document)
-        })
       }
     }
   })

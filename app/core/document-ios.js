@@ -21,6 +21,7 @@ const Document = UIDocument.extend({
 
 const todotxtBookmarkDataKey = 'todotxtBookmarkData'
 function storeBookmark (url) {
+  console.log('storeBookmark')
   const data = url.bookmarkDataWithOptionsIncludingResourceValuesForKeysRelativeToURLError(
     NSURLBookmarkCreationOptions.NSURLBookmarkCreationWithSecurityScope, [], null)
   NSUserDefaults.standardUserDefaults.setObjectForKey(data, todotxtBookmarkDataKey)
@@ -28,11 +29,17 @@ function storeBookmark (url) {
 
 function loadBookmark () {
   const data = NSUserDefaults.standardUserDefaults.dataForKey(todotxtBookmarkDataKey)
-  const isStalePointer = interop.alloc(interop.sizeof(interop.types.bool))
-  const url = NSURL.URLByResolvingBookmarkDataOptionsRelativeToURLBookmarkDataIsStaleError(data, NSURLBookmarkCreationOptions.NSURLBookmarkCreationWithSecurityScope, null, isStalePointer)
-  const isStale = new interop.Reference(interop.types.bool, isStalePointer)[0]
-  if (isStale) {
-    console.log('[WARNING] isStale == true, I will re-store and re-load bookmark', isStalePointer, isStale)
+  if (!data) {
+    return null
+  }
+  const isStale = new interop.Reference(interop.types.bool)
+  const url = NSURL.URLByResolvingBookmarkDataOptionsRelativeToURLBookmarkDataIsStaleError(
+    data,
+    NSURLBookmarkCreationOptions.NSURLBookmarkCreationWithSecurityScope,
+    null, isStale)
+  console.log('[INFO] isStale', isStale.value)
+  if (isStale.value) {
+    console.log('[WARNING] isStale == true, I will re-store and re-load bookmark', isStale.value)
     storeBookmark(url)
     return loadBookmark()
   }

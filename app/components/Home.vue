@@ -24,10 +24,12 @@
 
 <script>
 import TodoTXT from "../core/todotxt";
+import Task from "./Task";
+import { chooseDocument } from "../core/file-ios";
 
 export default {
   data: {
-    chooseFileToken: null
+    chooseDocumentToken: null
   },
   computed: {
     tasks() {
@@ -40,10 +42,22 @@ export default {
   },
   methods: {
     chooseDocument() {
-      // TODO add initial url?
-      this.$store.dispatch("chooseDocument");
+      if (this.chooseDocumentToken) {
+        return this.chooseDocumentToken(() => {
+          this.chooseDocumentToken = null;
+          this.chooseDocument();
+        });
+      }
+      this.chooseDocumentToken = chooseDocument(document => {
+        if (!document) {
+          return;
+        }
+        this.$store.commit("setDocument", document);
+      });
     },
-    createTask() {}
+    createTask() {
+      this.$showModal(Task);
+    }
   }
 };
 </script>
@@ -54,11 +68,6 @@ export default {
 // Custom styles
 .fas {
   @include colorize($color: accent);
-}
-
-.info {
-  font-size: 20;
-  vertical-align: center;
 }
 
 .task {

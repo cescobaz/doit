@@ -25,6 +25,7 @@ const DocumentPickerDelegate = NSObject.extend(
 )
 
 function chooseDocument (documentChoosen) {
+  console.log('chooseDocument')
   const controller = UIDocumentPickerViewController.alloc().initWithDocumentTypesInMode(
     NSArray.arrayWithArray([kUTTypeFolder, kUTTypeText]),
     UIDocumentPickerModeOpen
@@ -33,12 +34,13 @@ function chooseDocument (documentChoosen) {
   const delegate = DocumentPickerDelegate.alloc().init(url => loadDocumentWithURL(url, documentChoosen))
   controller.delegate = delegate
   const windows = UIApplication.sharedApplication.windows
-  windows.lastObject.rootViewController.presentViewControllerAnimatedCompletion(
+  const visibleController = windows.lastObject.rootViewController
+  console.log('choosedocument', visibleController.isViewLoaded, visibleController.view.window)
+  visibleController.presentViewControllerAnimatedCompletion(
     controller,
-    true,
+    false,
     () => { console.log('presented') }
   )
-
   return (finished) => {
     console.log('will release')
     controller.delegate = null
