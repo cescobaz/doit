@@ -11,15 +11,10 @@ const Document = UIDocument.extend({
     return 'ciao contenturto file'.dataUsingEncoding(NSUTF8StringEncoding)
   },
   loadFromContentsOfTypeError (contents, typeName) {
-    console.log('loadFromContentsOfType AAAAAAAAAAAAAA')
-    const stringContent = NSString.alloc().initWithDataEncoding(contents, NSUTF8StringEncoding)
-    console.log('loadFromContentsOfType EEEEEEEEEEND init')
-    console.log('loadFromContentsOfType', typeName, contents.length)
-    console.log('loadFromContentsOfType', contents)
-    console.log('loadFromContentsOfType', stringContent)
-    console.log('loadFromContentsOfType', JSON.parseLineLine(JSON.decode(stringContent)))
-    const tasks = this.todotxt
-    return stringContent
+    const stringContent = NSString.alloc().initWithDataEncoding(contents, NSUTF8StringEncoding).toString()
+    const tasks = this.todotxt.parse(stringContent)
+    console.log(tasks, JSON.stringify(tasks))
+    return tasks
   }
 }, {
   name: 'Document'

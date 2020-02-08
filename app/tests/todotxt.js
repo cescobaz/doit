@@ -8,6 +8,11 @@ function parseLineTest (input, expectedOutput) {
 }
 
 describe('todotxt core', function () {
+  it('empty line', function () {
+    const line = ''
+    const expectedTask = null
+    parseLineTest(line, expectedTask)
+  })
   it('simple description', function () {
     const line = 'Buy some food'
     const expectedTask = {
