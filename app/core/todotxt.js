@@ -5,8 +5,7 @@ function TodoTXT () {
 }
 
 TodoTXT.prototype.parse = function parse (text) {
-  console.log('TodoTXT parse', text)
-  return text.split('\n').map(this.parseLine).filter(task => task === null)
+  return text.split('\n').map(this.parseLine).filter(task => task !== null)
 }
 TodoTXT.prototype.load = function load (filePath, encoding, callback) {
   fs.readFile(filePath, encoding, function (error, content) {
@@ -31,7 +30,7 @@ function dateFromString (text) {
   return new Date(`${text.trim()}T00:00:00Z`)
 }
 TodoTXT.prototype.parseLine = function parseLine (line) {
-  if (!line || line.trim() === '') {
+  if (line.trim() === '') {
     return null
   }
   const matches = /(x )?(\([A-Z]\) )?([0-9]{4}-[0-9]{2}-[0-9]{2} )?([0-9]{4}-[0-9]{2}-[0-9]{2} )?(.*)$/.exec(line)

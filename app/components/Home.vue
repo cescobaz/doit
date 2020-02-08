@@ -32,18 +32,19 @@ export default {
   methods: {
     selectFile() {
       function openFile(document) {
-        console.log("la fine, il document", document);
+        console.log("la fine, il document", document, this);
         document.openWithCompletionHandler(success => {
           console.log("openWithCompletionHandler", success);
+          this.$store.commit("setTasks", document.tasks);
         });
       }
       if (this.chooseFileToken) {
         return this.chooseFileToken(() => {
           console.log("release finished");
-          this.chooseFileToken = chooseFile(openFile);
+          this.chooseFileToken = chooseFile(openFile.bind(this));
         });
       }
-      this.chooseFileToken = chooseFile(openFile);
+      this.chooseFileToken = chooseFile(openFile.bind(this));
     }
   }
 };

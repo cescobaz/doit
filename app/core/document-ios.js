@@ -13,8 +13,8 @@ const Document = UIDocument.extend({
   loadFromContentsOfTypeError (contents, typeName) {
     const stringContent = NSString.alloc().initWithDataEncoding(contents, NSUTF8StringEncoding).toString()
     const tasks = this.todotxt.parse(stringContent)
-    console.log(tasks, JSON.stringify(tasks))
-    return tasks
+    this.tasks = tasks
+    return true
   }
 }, {
   name: 'Document'

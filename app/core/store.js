@@ -6,7 +6,8 @@ function store () {
       tasks: [{ description: 'from store!!!' }]
     },
     mutations: {
-      loadTasks (state, tasks) {
+      setTasks (state, tasks) {
+        console.log('setTasks', tasks)
         state.tasks = tasks
       }
     }
