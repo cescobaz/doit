@@ -130,7 +130,8 @@ Temporary Items
 .apdisk
 
 ### NativeScript ###
-/platforms
+/platforms/android
+/platforms/io/Pods
 /hooks
 /node_modules
 /lib
