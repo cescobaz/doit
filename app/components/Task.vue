@@ -40,8 +40,10 @@ import { DateTime } from "luxon";
 export default {
   data() {
     return {
+      done: false,
       description: "",
-      creationDate: new Date()
+      creationDate: new Date(),
+      priority: null
     };
   },
   computed: {
