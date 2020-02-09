@@ -17,6 +17,9 @@ function store () {
         loadDocument(document => {
           context.commit('setDocument', document)
         })
+      },
+      addTask (context, task) {
+        state.document.tasks.push(task)
       }
     }
   })

@@ -6,7 +6,7 @@ const Document = UIDocument.extend({
     return super.initWithFileURL(url)
   },
   contentsForType (type) {
-    console.log('contentsForType', type)
+    console.log('contentsForType SAVINGGGG??', type)
     return 'ciao contenturto file'.dataUsingEncoding(NSUTF8StringEncoding)
   },
   loadFromContentsOfTypeError (contents, typeName) {
