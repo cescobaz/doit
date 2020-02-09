@@ -23,13 +23,14 @@
 </template>
 
 <script>
-import TodoTXT from "../core/todotxt";
 import Task from "./Task";
 import { chooseDocument } from "../core/file-ios";
 
 export default {
-  data: {
-    chooseDocumentToken: null
+  data() {
+    return {
+      chooseDocumentToken: null
+    };
   },
   computed: {
     tasks() {

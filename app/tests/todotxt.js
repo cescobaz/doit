@@ -1,5 +1,4 @@
-const TodoTXT = require('../core/todotxt')
-const todotxt = new TodoTXT()
+const todotxt = require('../core/todotxt')
 const { assert } = require('chai')
 
 function parseLineTest (input, expectedOutput) {

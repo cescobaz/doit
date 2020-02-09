@@ -1,17 +1,16 @@
-const TodoTXT = require('./todotxt')
+const todotxt = require('./todotxt')
 
 const Document = UIDocument.extend({
   initWithFileURL (url) {
-    this.todotxt = new TodoTXT()
     return super.initWithFileURL(url)
   },
   contentsForTypeError (type) {
-    const text = this.todotxt.serialize(this.tasks)
+    const text = todotxt.serialize(this.tasks)
     return NSString.stringWithString(text).dataUsingEncoding(NSUTF8StringEncoding)
   },
   loadFromContentsOfTypeError (contents, typeName) {
     const stringContent = NSString.alloc().initWithDataEncoding(contents, NSUTF8StringEncoding).toString()
-    const tasks = this.todotxt.parse(stringContent)
+    const tasks = todotxt.parse(stringContent)
     this.tasks = tasks
     return true
   }

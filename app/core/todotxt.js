@@ -2,13 +2,10 @@
 const fs = require('fs')
 const { DateTime } = require('luxon')
 
-function TodoTXT () {
-}
-
-TodoTXT.prototype.parse = function parse (text) {
+function parse (text) {
   return text.split('\n').map(this.parseLine).filter(task => task !== null)
 }
-TodoTXT.prototype.load = function load (filePath, encoding, callback) {
+function load (filePath, encoding, callback) {
   fs.readFile(filePath, encoding, function (error, content) {
     if (error) {
       return callback(error)
@@ -30,7 +27,7 @@ function dateFromString (text) {
   }
   return new Date(`${text.trim()}T00:00:00Z`)
 }
-TodoTXT.prototype.parseLine = function parseLine (line) {
+function parseLine (line) {
   if (line.trim() === '') {
     return null
   }
@@ -81,13 +78,14 @@ function parseDescription (description) {
   }
 }
 
-TodoTXT.prototype.serialize = function serialize (tasks) {
+function serialize (tasks) {
   return tasks.map(this.serializeTask.bind(this)).join('\n')
 }
+const serializationDateFormat = 'yyyy-MM-dd'
 function serializeDate (date) {
-  return DateTime.fromJSDate(date, { zone: 'utc' }).toFormat('yyyy-MM-dd')
+  return DateTime.fromJSDate(date, { zone: 'utc' }).toFormat(serializationDateFormat)
 }
-TodoTXT.prototype.serializeTask = function serializeTask (task) {
+function serializeTask (task) {
   const done = task.done ? 'x ' : ''
   const priority = task.priority ? task.priority + ' ' : ''
   const completionDate = task.completionDate ? `${serializeDate(task.completionDate)} ` : ''
@@ -95,4 +93,4 @@ TodoTXT.prototype.serializeTask = function serializeTask (task) {
   return `${done}${priority}${completionDate}${creationDate}${task.description}`
 }
 
-module.exports = TodoTXT
+module.exports = { parse, parseLine, serialize, serializeTask, serializationDateFormat }

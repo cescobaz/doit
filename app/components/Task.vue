@@ -18,17 +18,15 @@
       </ActionBar>
       <StackLayout>
         <TextField
-          :text="description"
-          @textChange="textChange"
+          v-model="description"
           ref="descriptionTextField"
           class="description"
           hint="Write your todo +hint"
           returnKeyType="done"
           @returnPress="save"
         />
-        <Label text="separatore" />
-        <Label :text="description" />
-        <Label :text="creationDate" />
+        <Label :text="creationDateLocale" />
+        <Label text="none" />
       </StackLayout>
     </Page>
   </Frame>
@@ -36,15 +34,26 @@
 
 <script>
 import { isIOS, isAndroid } from "platform";
-import TodoTXT from "../core/todotxt";
+import todotxt from "../core/todotxt";
+import { DateTime } from "luxon";
 
 export default {
-  data: {
-    description: "wee",
-    creationDate: "2020-01-25",
-    couldSave: false
+  data() {
+    return {
+      description: "",
+      creationDate: new Date()
+    };
   },
-  computed: {},
+  computed: {
+    creationDateLocale() {
+      return DateTime.fromJSDate(this.creationDate).toFormat(
+        todotxt.serializationDateFormat
+      );
+    },
+    couldSave() {
+      return !!(this.description && this.description.trim().length > 0);
+    }
+  },
   methods: {
     onLoaded() {
       this.updateSaveActionItem();
@@ -89,12 +98,10 @@ export default {
           .findItem(actionItem._getItemId())
           .setEnabled(this.couldSave);
       }
-    },
-    textChange(textField) {
-      this.description = textField.value;
-      this.couldSave = !!(
-        this.description && this.description.trim().length > 0
-      );
+    }
+  },
+  watch: {
+    couldSave() {
       this.updateSaveActionItem();
     }
   }
