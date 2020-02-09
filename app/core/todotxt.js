@@ -49,9 +49,9 @@ function parseLine (line) {
 function parseDescriptionTags (description, regex) {
   const matches = regex.exec(description)
   if (!matches) {
-    return []
+    return new Set()
   }
-  return [matches[1]].concat(parseDescriptionTags(description, regex))
+  return parseDescriptionTags(description, regex).add(matches[1])
 }
 
 function parseDescriptionMetadata (regex) {
@@ -68,8 +68,8 @@ function parseDescriptionMetadata (regex) {
 }
 
 function parseDescription (description) {
-  const projects = parseDescriptionTags(description, /(\+\w+)/g)
-  const contexts = parseDescriptionTags(description, /(@\w+)/g)
+  const projects = [...parseDescriptionTags(description, /(\+\w+)/g)].sort()
+  const contexts = [...parseDescriptionTags(description, /(@\w+)/g)].sort()
   const extraMetadata = parseDescriptionMetadata(/(\w+):(\w+)/g)(description)
   return {
     projects,

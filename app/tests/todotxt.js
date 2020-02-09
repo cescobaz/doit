@@ -190,7 +190,7 @@ describe('todotxt core', function () {
       creationDate: null,
       description: 'Buy some +food for +home @betterLife @yeah and @cool',
       projects: ['+food', '+home'],
-      contexts: ['@betterLife', '@yeah', '@cool'],
+      contexts: ['@betterLife', '@cool', '@yeah'],
       extraMetadata: {}
     }
     parseLineTest(line, expectedTask)
@@ -204,7 +204,21 @@ describe('todotxt core', function () {
       creationDate: null,
       description: 'Buy some +food for +home @betterLife @yeah and @cool',
       projects: ['+food', '+home'],
-      contexts: ['@betterLife', '@yeah', '@cool'],
+      contexts: ['@betterLife', '@cool', '@yeah'],
+      extraMetadata: {}
+    }
+    parseLineTest(line, expectedTask)
+  })
+  it('completed task with two project equal and one different', function () {
+    const line = 'Buy some +food for +home and +food'
+    const expectedTask = {
+      done: false,
+      priority: null,
+      completionDate: null,
+      creationDate: null,
+      description: 'Buy some +food for +home and +food',
+      projects: ['+food', '+home'],
+      contexts: [],
       extraMetadata: {}
     }
     parseLineTest(line, expectedTask)
