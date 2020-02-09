@@ -46,6 +46,9 @@ function indexForPriority (priority, maxPriorityIndex = 7) {
 function colorForPriority (priority, maxPriorityIndex = 7) {
   const index = indexForPriority(priority, maxPriorityIndex)
   const saturatedIndex = (index > maxPriorityIndex) ? maxPriorityIndex : index
+  if (saturatedIndex === maxPriorityIndex) {
+    return 'gray'
+  }
   const hdelta = 360 / maxPriorityIndex
   return `hsl(${saturatedIndex * hdelta},60%,50%)`
 }

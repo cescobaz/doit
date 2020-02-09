@@ -1,13 +1,13 @@
 <template>
-  <StackLayout orientation="horizontal" class="p-20">
-    <Label :text="task.priority" class="priority" />
-    <StackLayout orientation="vertical">
+  <StackLayout orientation="horizontal" class="full-w-h">
+    <AbsoluteLayout :backgroundColor="priorityColor" width="4" height="100%" />
+    <StackLayout orientation="vertical" class="full-w-h">
       <Label :text="creationDateLocale" class="creation-date" />
       <Label :text="task.description" textWrap="true" class="description" />
       <FlexboxLayout
         justifyContent="flex-end"
         flexWrap="wrap"
-        class="projectsAndContexts"
+        class="projectsAndContexts full-w-h"
       >
         <Label :text="projects" textWrap="true" class="projects" />
         <Label :text="contexts" textWrap="true" class="contexts" />
@@ -19,6 +19,7 @@
 <script>
 import todotxt from "../core/todotxt";
 import { DateTime } from "luxon";
+import { colorForPriority } from "../core/todotxt-presenter";
 
 export default {
   props: ["task"],
@@ -26,9 +27,12 @@ export default {
     return {};
   },
   computed: {
+    priorityColor() {
+      return colorForPriority(this.task.priority);
+    },
     creationDateLocale() {
       if (!this.task.creationDate) {
-        return "|";
+        return "-";
       }
       return DateTime.fromJSDate(this.task.creationDate).toFormat(
         todotxt.serializationDateFormat
@@ -57,21 +61,27 @@ export default {
 .fas {
   @include colorize($color: accent);
 }
+.full-w-h {
+  padding: 0;
+  margin: 0;
+}
+.row {
+  padding: 0;
+  margin: 0;
+}
 .description {
   font-size: 20;
-  background-color: gray;
 }
 .priority {
-  background-color: red;
+  font-size: 20;
 }
 .creation-date {
-  background-color: yellow;
   text-align: right;
   width: 100%;
 }
 .projects,
 .contexts {
-  background-color: black;
+  background-color: gray;
   font-size: 16;
   height: 30;
   color: white;
