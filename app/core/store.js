@@ -11,7 +11,7 @@ function store () {
     mutations: {
       setDocument (state, document) {
         state.document = document
-        state.tasks = document.tasks || []
+        state.tasks = (document && document.tasks) ? document.tasks : []
       },
       addTask (state, task) {
         state.tasks.push(task)

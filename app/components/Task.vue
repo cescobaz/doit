@@ -57,7 +57,6 @@ export default {
       this.$modal.close();
     },
     save() {
-      console.log("save", this.description);
       if (!this.couldSave) {
         return;
       }
@@ -65,9 +64,9 @@ export default {
         description: this.description
       };
       this.$store.dispatch("addTask", task);
+      this.$modal.close();
     },
     updateSaveActionItem() {
-      console.log(this.description);
       if (isIOS) {
         const page = this.$refs.page;
         if (

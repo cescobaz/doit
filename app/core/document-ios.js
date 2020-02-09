@@ -5,9 +5,9 @@ const Document = UIDocument.extend({
     this.todotxt = new TodoTXT()
     return super.initWithFileURL(url)
   },
-  contentsForType (type) {
-    console.log('contentsForType SAVINGGGG??', type)
-    return 'ciao contenturto file'.dataUsingEncoding(NSUTF8StringEncoding)
+  contentsForTypeError (type) {
+    const text = this.todotxt.serialize(this.tasks)
+    return NSString.stringWithString(text).dataUsingEncoding(NSUTF8StringEncoding)
   },
   loadFromContentsOfTypeError (contents, typeName) {
     const stringContent = NSString.alloc().initWithDataEncoding(contents, NSUTF8StringEncoding).toString()
