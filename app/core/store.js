@@ -1,6 +1,7 @@
 const Vuex = require('vuex')
 const { chooseDocument } = require('./file-ios')
 const { loadDocument } = require('./document-ios')
+const { compare } = require('./todotxt-presenter')
 
 function store () {
   return new Vuex.Store({
@@ -15,6 +16,7 @@ function store () {
       },
       addTask (state, task) {
         state.tasks.push(task)
+        state.tasks.sort(compare)
         state.document.tasks = state.tasks
         state.document.updateChangeCount(UIDocumentChangeKind.UIDocumentChangeDone)
       }
