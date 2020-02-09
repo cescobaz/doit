@@ -50,23 +50,16 @@
 import { isIOS, isAndroid } from "platform";
 import todotxt from "../core/todotxt";
 import { DateTime } from "luxon";
+import { colorForPriority } from "../core/todotxt-presenter";
 
 function priorityViewModelMaker(priorities) {
-  const prioritySize = 7;
-  const hdelta = 360 / prioritySize;
-  const computeIndex = index => {
-    if (index > prioritySize) {
-      return 7;
-    }
-    return index;
-  };
   return priorities.map((priority, index) => {
     const value = `(${priority})`;
     return {
       index,
       label: value,
       value,
-      color: `hsl(${computeIndex(index) * hdelta},60%,50%)`,
+      color: colorForPriority(value),
       selected: false
     };
   });

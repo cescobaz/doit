@@ -2,7 +2,7 @@ const todotxt = require('../core/todotxt-presenter')
 const { assert } = require('chai')
 
 function serializeTest (input, expectedOutput) {
-  const output = todotxt.sort(input)
+  const output = input.sort(todotxt.compare)
   assert.deepEqual(output, expectedOutput, JSON.stringify(output))
 }
 
@@ -177,5 +177,13 @@ describe('todotxt presenter', function () {
       }
     ]
     serializeTest(tasks, [tasks[2], tasks[0], tasks[1]])
+  })
+})
+describe('todotxt presenter, priority stuff', function () {
+  it('get index in bound', function () {
+    assert.equal(todotxt.indexForPriority('(A)'), 0)
+  })
+  it('get index in bound - C -> 2', function () {
+    assert.equal(todotxt.indexForPriority('(C)'), 2)
   })
 })

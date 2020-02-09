@@ -22,9 +22,6 @@ function compare (a, b) {
   }
   return 0
 }
-function sort (tasks) {
-  return tasks.sort(compare)
-}
 
 function projects (tasks) {
   return tags('projects', tasks)
@@ -38,4 +35,19 @@ function tags (key, tasks) {
 
 }
 
-module.exports = { compare, sort, projects, contexts }
+function indexForPriority (priority, maxPriorityIndex = 7) {
+  const matches = /^ *\(([A-Z])\) *$/.exec(priority)
+  if (!matches) {
+    return maxPriorityIndex
+  }
+  return matches[1].charCodeAt(0) - 'A'.charCodeAt(0)
+}
+
+function colorForPriority (priority, maxPriorityIndex = 7) {
+  const index = indexForPriority(priority, maxPriorityIndex)
+  const saturatedIndex = (index > maxPriorityIndex) ? maxPriorityIndex : index
+  const hdelta = 360 / maxPriorityIndex
+  return `hsl(${saturatedIndex * hdelta},60%,50%)`
+}
+
+module.exports = { compare, projects, contexts, indexForPriority, colorForPriority }

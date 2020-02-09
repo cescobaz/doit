@@ -13,6 +13,7 @@ function store () {
       setDocument (state, document) {
         state.document = document
         state.tasks = (document && document.tasks) ? document.tasks : []
+        state.tasks.sort(compare)
       },
       addTask (state, task) {
         state.tasks.push(task)
