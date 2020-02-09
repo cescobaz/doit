@@ -20,7 +20,7 @@
         <TextField
           v-model="description"
           ref="descriptionTextField"
-          class="description"
+          class="description -border "
           hint="Write your todo +hint"
           returnKeyType="done"
           @returnPress="save"
@@ -72,7 +72,9 @@ export default {
         return;
       }
       const task = {
-        description: this.description
+        description: this.description,
+        creationDate: this.creationDate,
+        priority: this.priority
       };
       this.$store.dispatch("addTask", task);
       this.$modal.close();

@@ -14,10 +14,8 @@
         @tap="createTask"
       />
     </ActionBar>
-    <ListView for="task in tasks">
-      <v-template>
-        <Label class="task" :text="task.description" />
-      </v-template>
+    <ListView for="task in tasks" separatorColor="transparent">
+      <v-template> <TaskRow :task="task" /> </v-template>
     </ListView>
   </Page>
 </template>
@@ -25,6 +23,7 @@
 <script>
 import Task from "./Task";
 import { chooseDocument } from "../core/file-ios";
+import TaskRow from "./TaskRow";
 
 export default {
   data() {
@@ -55,6 +54,9 @@ export default {
     createTask() {
       this.$showModal(Task);
     }
+  },
+  components: {
+    TaskRow
   }
 };
 </script>
@@ -65,10 +67,5 @@ export default {
 // Custom styles
 .fas {
   @include colorize($color: accent);
-}
-
-.task {
-  font-size: 20;
-  padding: 10;
 }
 </style>
