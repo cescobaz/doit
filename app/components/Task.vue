@@ -71,7 +71,9 @@ export default {
       if (!this.couldSave) {
         return;
       }
+      const taskByParsing = todotxt.parseLine(this.description);
       const task = {
+        ...taskByParsing,
         description: this.description,
         creationDate: this.creationDate,
         priority: this.priority

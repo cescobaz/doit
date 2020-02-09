@@ -134,6 +134,7 @@ Temporary Items
 /platforms/ios/Pods
 /platforms/ios/**/*.ipa
 /platforms/ios/**/*.zip
+/platforms/ios/doit/app
 /hooks
 /node_modules
 /lib
@@ -253,6 +254,9 @@ dist/
 # Temporary folders
 tmp/
 temp/
+
+### VSCODE ###
+.vscode
 
 ### Vim ###
 # Swap

@@ -1,10 +1,19 @@
 <template>
-  <DockLayout stretchLastChild="false" class="p-20">
-    <Label :text="task.priority" dock="left" class="priority" />
-    <Label :text="creationDateLocale" dock="top" class="creation-date" />
-    <Label text"_____" dock="bottom" class="projects" />
-    <Label :text="task.description" class="description" />
-  </DockLayout>
+  <StackLayout orientation="horizontal" class="p-20">
+    <Label :text="task.priority" class="priority" />
+    <StackLayout orientation="vertical">
+      <Label :text="creationDateLocale" class="creation-date" />
+      <Label :text="task.description" class="description" />
+      <FlexboxLayout
+        justifyContent="flex-end"
+        flexWrap="wrap"
+        class="projectsAndContexts"
+      >
+        <Label :text="projects" class="projects" />
+        <Label :text="contexts" class="contexts" />
+      </FlexboxLayout>
+    </StackLayout>
+  </StackLayout>
 </template>
 
 <script>
@@ -19,11 +28,23 @@ export default {
   computed: {
     creationDateLocale() {
       if (!this.task.creationDate) {
-        return "";
+        return "|";
       }
       return DateTime.fromJSDate(this.task.creationDate).toFormat(
         todotxt.serializationDateFormat
       );
+    },
+    contexts() {
+      if (!this.task.contexts) {
+        return "";
+      }
+      return this.task.contexts.join(" ");
+    },
+    projects() {
+      if (!this.task.projects) {
+        return "";
+      }
+      return this.task.projects.join(" ");
     }
   }
 };
@@ -46,9 +67,16 @@ export default {
 .creation-date {
   background-color: yellow;
   text-align: right;
+  width: 100%;
 }
-.projects {
+.projects,
+.contexts {
   background-color: black;
   font-size: 16;
+  height: 30;
+  color: white;
+}
+.projectsAndContexts {
+  width: 100%;
 }
 </style>
