@@ -1,5 +1,6 @@
 'use strict'
 const fs = require('fs')
+const { DateTime } = require('luxon')
 
 function TodoTXT () {
 }
@@ -78,6 +79,20 @@ function parseDescription (description) {
     contexts,
     extraMetadata
   }
+}
+
+TodoTXT.prototype.serialize = function serialize (tasks) {
+  return tasks.map(this.serializeTask.bind(this)).join('\n')
+}
+function serializeDate (date) {
+  return DateTime.fromJSDate(date, { zone: 'utc' }).toFormat('yyyy-MM-dd')
+}
+TodoTXT.prototype.serializeTask = function serializeTask (task) {
+  const done = task.done ? 'x ' : ''
+  const priority = task.priority ? task.priority + ' ' : ''
+  const completionDate = task.completionDate ? `${serializeDate(task.completionDate)} ` : ''
+  const creationDate = task.creationDate ? `${serializeDate(task.creationDate)} ` : ''
+  return `${done}${priority}${completionDate}${creationDate}${task.description}`
 }
 
 module.exports = TodoTXT

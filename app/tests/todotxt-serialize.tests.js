@@ -11,10 +11,10 @@ describe('todotxt serialize', function () {
   it('one complete task', function () {
     const tasks = [
       {
-        done: done,
+        done: true,
         priority: '(B)',
         completionDate: new Date('2020-02-28T00:00:00Z'),
-        creationDate: new Date('2020-02-28T00:00:00Z'),
+        creationDate: new Date('2020-02-01T00:00:00Z'),
         description: 'Buy some food @food +health',
         projects: ['+health'],
         contexts: ['@food'],
@@ -47,7 +47,7 @@ describe('todotxt serialize', function () {
         extraMetadata: {}
       }
     ]
-    const expectedText = 'Buy some food\nx (A) Buy some win'
+    const expectedText = 'Buy some food\nx (A) Buy some wine'
     serializeTest(tasks, expectedText)
   })
 })

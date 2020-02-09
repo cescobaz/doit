@@ -28,6 +28,7 @@
         />
         <Label text="separatore" />
         <Label :text="description" />
+        <Label :text="creationDate" />
       </StackLayout>
     </Page>
   </Frame>
@@ -40,7 +41,8 @@ import TodoTXT from "../core/todotxt";
 export default {
   data: {
     description: "wee",
-    creationDate: null
+    creationDate: "2020-01-25",
+    couldSave: false
   },
   computed: {},
   methods: {
@@ -55,35 +57,45 @@ export default {
       this.$modal.close();
     },
     save() {
-      console.log("save");
-      if (!this.saveEnabled) {
+      console.log("save", this.description);
+      if (!this.couldSave) {
         return;
       }
+      const task = {
+        description: this.description
+      };
+      this.$store.dispatch("addTask", task);
     },
     updateSaveActionItem() {
       console.log(this.description);
-      const saveEnabled = !!(
-        this.description && this.description.trim().length > 0
-      );
       if (isIOS) {
         const page = this.$refs.page;
-        const buttonItem = page.nativeView.ios;
-        if (!buttonItem) {
+        if (
+          !(
+            page &&
+            page.nativeView &&
+            page.nativeView.ios &&
+            page.nativeView.ios.navigationItem &&
+            page.nativeView.ios.navigationItem.rightBarButtonItem
+          )
+        ) {
           return;
         }
-        console.log(saveEnabled);
-        buttonItem.enabled = saveEnabled;
+        page.nativeView.ios.navigationItem.rightBarButtonItem.enabled = this.couldSave;
       }
       if (isAndroid) {
         const actionItem = this.$refs.saveActionItem.nativeView;
         actionItem.actionBar.nativeViewProtected
           .getMenu()
           .findItem(actionItem._getItemId())
-          .setEnabled(saveEnabled);
+          .setEnabled(this.couldSave);
       }
     },
     textChange(textField) {
       this.description = textField.value;
+      this.couldSave = !!(
+        this.description && this.description.trim().length > 0
+      );
       this.updateSaveActionItem();
     }
   }

@@ -33,11 +33,7 @@ export default {
   },
   computed: {
     tasks() {
-      const document = this.$store.state.document;
-      if (!document) {
-        return [];
-      }
-      return document.tasks;
+      return this.$store.state.tasks;
     }
   },
   methods: {

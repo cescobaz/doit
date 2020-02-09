@@ -5,11 +5,18 @@ const { loadDocument } = require('./document-ios')
 function store () {
   return new Vuex.Store({
     state: {
-      document: null
+      document: null,
+      tasks: []
     },
     mutations: {
       setDocument (state, document) {
         state.document = document
+        state.tasks = document.tasks || []
+      },
+      addTask (state, task) {
+        state.tasks.push(task)
+        state.document.tasks = state.tasks
+        state.document.updateChangeCount(UIDocumentChangeKind.UIDocumentChangeDone)
       }
     },
     actions: {
@@ -19,7 +26,7 @@ function store () {
         })
       },
       addTask (context, task) {
-        state.document.tasks.push(task)
+        context.commit('addTask', task)
       }
     }
   })
