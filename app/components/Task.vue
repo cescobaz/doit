@@ -25,6 +25,20 @@
           returnKeyType="done"
           @returnPress="save"
         />
+        <FlexboxLayout>
+          <Button
+            v-for="viewModel in priorities"
+            v-bind:key="viewModel.index"
+            :text="viewModel.label"
+            flexGrow="1"
+            :backgroundColor="
+              viewModel.selected ? viewModel.color : transparent
+            "
+            class="p-0 m-2 -outline"
+            :class="{ 'priority-button-selected': viewModel.selected }"
+            @tap="prioritySelected(viewModel)"
+          />
+        </FlexboxLayout>
         <Label :text="creationDateLocale" />
         <Label text="none" />
       </StackLayout>
@@ -37,13 +51,35 @@ import { isIOS, isAndroid } from "platform";
 import todotxt from "../core/todotxt";
 import { DateTime } from "luxon";
 
+function priorityViewModelMaker(priorities) {
+  const prioritySize = 7;
+  const hdelta = 360 / prioritySize;
+  const computeIndex = index => {
+    if (index > prioritySize) {
+      return 7;
+    }
+    return index;
+  };
+  return priorities.map((priority, index) => {
+    const value = `(${priority})`;
+    return {
+      index,
+      label: value,
+      value,
+      color: `hsl(${computeIndex(index) * hdelta},60%,50%)`,
+      selected: false
+    };
+  });
+}
+
 export default {
   data() {
     return {
       done: false,
       description: "",
       creationDate: new Date(),
-      priority: null
+      priority: null,
+      priorities: priorityViewModelMaker(["A", "B", "C", "D", "E"])
     };
   },
   computed: {
@@ -57,10 +93,6 @@ export default {
     }
   },
   methods: {
-    onLoaded() {
-      this.updateSaveActionItem();
-      this.focus();
-    },
     focus() {
       this.$refs.descriptionTextField.nativeView.focus();
     },
@@ -104,6 +136,13 @@ export default {
           .findItem(actionItem._getItemId())
           .setEnabled(this.couldSave);
       }
+    },
+    prioritySelected(viewModel) {
+      console.log("prioritySelected", viewModel);
+      this.priority = viewModel.value;
+      this.priorities.forEach(
+        (p, index) => (p.selected = p.index === viewModel.index)
+      );
     }
   },
   watch: {
@@ -124,5 +163,9 @@ export default {
 .description {
   font-size: 30;
   padding: 20;
+}
+.priority-button-selected {
+  color: white;
+  border: none;
 }
 </style>

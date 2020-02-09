@@ -3,14 +3,14 @@
     <Label :text="task.priority" class="priority" />
     <StackLayout orientation="vertical">
       <Label :text="creationDateLocale" class="creation-date" />
-      <Label :text="task.description" class="description" />
+      <Label :text="task.description" textWrap="true" class="description" />
       <FlexboxLayout
         justifyContent="flex-end"
         flexWrap="wrap"
         class="projectsAndContexts"
       >
-        <Label :text="projects" class="projects" />
-        <Label :text="contexts" class="contexts" />
+        <Label :text="projects" textWrap="true" class="projects" />
+        <Label :text="contexts" textWrap="true" class="contexts" />
       </FlexboxLayout>
     </StackLayout>
   </StackLayout>
