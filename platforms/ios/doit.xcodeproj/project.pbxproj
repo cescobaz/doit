@@ -493,7 +493,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = doit/doitDebug.entitlements;
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 8EUCAB52AK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -518,6 +518,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.cescobaz.doit;
 				PRODUCT_NAME = doit;
 				PROVISIONING_PROFILE_SPECIFIER = "doit-development-profile";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -529,7 +530,7 @@
 				CODE_SIGN_ENTITLEMENTS = doit/doitRelease.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 8EUCAB52AK;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -550,6 +551,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.cescobaz.doit;
 				PRODUCT_NAME = doit;
 				PROVISIONING_PROFILE_SPECIFIER = "doi-appstore-profile";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
