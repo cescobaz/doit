@@ -14,9 +14,11 @@
         @tap="createTask"
       />
     </ActionBar>
-    <ListView for="task in tasks" separatorColor="transparent">
-      <v-template> <TaskRow :task="task" /> </v-template>
-    </ListView>
+    <RadListView for="task in tasks" swipeActions="true">
+      <v-template>
+        <TaskRow :task="task" />
+      </v-template>
+    </RadListView>
   </Page>
 </template>
 

@@ -1,16 +1,25 @@
 <template>
-  <StackLayout orientation="horizontal" class="full-w-h">
+  <StackLayout orientation="horizontal" class="row full-w-h">
     <AbsoluteLayout :backgroundColor="priorityColor" width="4" height="100%" />
     <StackLayout orientation="vertical" class="full-w-h">
       <Label :text="creationDateLocale" class="creation-date" />
-      <Label :text="task.description" textWrap="true" class="description" />
+      <Label :text="task.description" textWrap="false" class="description" />
       <FlexboxLayout
         justifyContent="flex-end"
         flexWrap="wrap"
         class="projectsAndContexts full-w-h"
       >
-        <Label :text="projects" textWrap="true" class="projects" />
-        <Label :text="contexts" textWrap="true" class="contexts" />
+        <Label text="@placeholder" class="tags-placeholder" />
+        <Label
+          v-if="projects && projects.length"
+          :text="projects"
+          class="projects"
+        />
+        <Label
+          v-if="contexts && contexts.length"
+          :text="contexts"
+          class="contexts"
+        />
       </FlexboxLayout>
     </StackLayout>
   </StackLayout>
@@ -66,8 +75,6 @@ export default {
   margin: 0;
 }
 .row {
-  padding: 0;
-  margin: 0;
 }
 .description {
   font-size: 20;
@@ -79,6 +86,11 @@ export default {
   text-align: right;
   width: 100%;
 }
+.tags-placeholder {
+  color: white;
+  background-color: white;
+}
+
 .projects,
 .contexts {
   background-color: gray;

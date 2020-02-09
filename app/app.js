@@ -1,10 +1,12 @@
 import Vue from 'nativescript-vue'
 import Vuex from 'vuex'
+import RadListView from 'nativescript-ui-listview/vue'
 
 import store from './core/store'
 import Home from './components/Home'
 
 Vue.use(Vuex)
+Vue.use(RadListView)
 
 new Vue({
   store: store(),
