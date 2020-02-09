@@ -131,7 +131,9 @@ Temporary Items
 
 ### NativeScript ###
 /platforms/android
-/platforms/io/Pods
+/platforms/ios/Pods
+/platforms/ios/**/*.ipa
+/platforms/ios/**/*.zip
 /hooks
 /node_modules
 /lib
