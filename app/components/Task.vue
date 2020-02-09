@@ -1,6 +1,6 @@
 <template>
-  <Frame>
-    <Page @loaded="focus">
+  <Frame @shownModally="updateSaveActionItem">
+    <Page ref="page" @loaded="focus">
       <ActionBar title="Task">
         <ActionItem
           ios.systemIcon="1"
@@ -9,6 +9,7 @@
           @tap="cancel"
         />
         <ActionItem
+          ref="saveActionItem"
           ios.systemIcon="3"
           android.systemIcon=""
           ios.position="right"
@@ -17,27 +18,36 @@
       </ActionBar>
       <StackLayout>
         <TextField
+          :text="description"
+          @textChange="textChange"
           ref="descriptionTextField"
           class="description"
-          returnKeyType="done"
-          v-model="description"
           hint="Write your todo +hint"
+          returnKeyType="done"
+          @returnPress="save"
         />
+        <Label text="separatore" />
+        <Label :text="description" />
       </StackLayout>
     </Page>
   </Frame>
 </template>
 
 <script>
+import { isIOS, isAndroid } from "platform";
 import TodoTXT from "../core/todotxt";
 
 export default {
   data: {
-    description: null,
+    description: "wee",
     creationDate: null
   },
   computed: {},
   methods: {
+    onLoaded() {
+      this.updateSaveActionItem();
+      this.focus();
+    },
     focus() {
       this.$refs.descriptionTextField.nativeView.focus();
     },
@@ -46,6 +56,35 @@ export default {
     },
     save() {
       console.log("save");
+      if (!this.saveEnabled) {
+        return;
+      }
+    },
+    updateSaveActionItem() {
+      console.log(this.description);
+      const saveEnabled = !!(
+        this.description && this.description.trim().length > 0
+      );
+      if (isIOS) {
+        const page = this.$refs.page;
+        const buttonItem = page.nativeView.ios;
+        if (!buttonItem) {
+          return;
+        }
+        console.log(saveEnabled);
+        buttonItem.enabled = saveEnabled;
+      }
+      if (isAndroid) {
+        const actionItem = this.$refs.saveActionItem.nativeView;
+        actionItem.actionBar.nativeViewProtected
+          .getMenu()
+          .findItem(actionItem._getItemId())
+          .setEnabled(saveEnabled);
+      }
+    },
+    textChange(textField) {
+      this.description = textField.value;
+      this.updateSaveActionItem();
     }
   }
 };
@@ -61,10 +100,5 @@ export default {
 .description {
   font-size: 30;
   padding: 20;
-}
-
-.text-field {
-  font-size: 20;
-  padding: 10;
 }
 </style>
