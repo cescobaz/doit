@@ -2,8 +2,13 @@
   <StackLayout orientation="horizontal" class="row full-w-h">
     <AbsoluteLayout :backgroundColor="priorityColor" width="4" height="100%" />
     <StackLayout orientation="vertical" class="full-w-h">
-      <Label :text="creationDateLocale" class="creation-date" />
-      <Label :text="task.description" textWrap="false" class="description" />
+      <Label :text="dates" class="creation-date" />
+      <Label
+        :text="task.description"
+        textWrap="false"
+        class="description"
+        :class="descriptionClassName"
+      />
       <FlexboxLayout
         justifyContent="flex-end"
         flexWrap="wrap"
@@ -30,22 +35,29 @@ import todotxt from "../core/todotxt";
 import { DateTime } from "luxon";
 import { colorForPriority } from "../core/todotxt-presenter";
 
+function dateToLocaleString(date) {
+  if (!date) {
+    return "";
+  }
+  return DateTime.fromJSDate(date).toFormat(todotxt.serializationDateFormat);
+}
+
 export default {
   props: ["task"],
   data() {
     return {};
   },
   computed: {
+    descriptionClassName() {
+      return this.task && this.task.done ? "strike" : null;
+    },
     priorityColor() {
       return colorForPriority(this.task.priority);
     },
-    creationDateLocale() {
-      if (!this.task.creationDate) {
-        return "-";
-      }
-      return DateTime.fromJSDate(this.task.creationDate).toFormat(
-        todotxt.serializationDateFormat
-      );
+    dates() {
+      return `${dateToLocaleString(
+        this.task.completionDate
+      )} - ${dateToLocaleString(this.task.creationDate)}`;
     },
     contexts() {
       if (!this.task.contexts) {
@@ -75,9 +87,13 @@ export default {
   margin: 0;
 }
 .row {
+  background-color: #d4d4d4;
 }
 .description {
   font-size: 20;
+}
+.strike {
+  text-decoration: line-through;
 }
 .priority {
   font-size: 20;
