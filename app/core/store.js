@@ -19,15 +19,30 @@ function store () {
         state.document.tasks = state.tasks
         state.document.updateChangeCount(UIDocumentChangeKind.UIDocumentChangeDone)
       },
+      sort (state) {
+        state.task.sort(compare)
+        this.commit('updateDocument')
+      },
       addTask (state, task) {
         state.tasks.push(task)
         state.tasks.sort(compare)
         this.commit('updateDocument')
       },
-      toggleDoneTask (state, task) {
+      toggleDoneTask (state, task, sort) {
         task.done = !task.done
         task.completionDate = task.done ? new Date() : null
-        state.tasks.sort(compare)
+        if (sort) {
+          state.tasks.sort(compare)
+        }
+        this.commit('updateDocument')
+      },
+      deleteTask (state, task) {
+        const index = state.tasks.indexOf(task)
+        if (!(index >= 0)) {
+          console.log('error', 'no task to delete', task)
+          return
+        }
+        state.tasks.splice(index, 1)
         this.commit('updateDocument')
       }
     },
@@ -37,11 +52,17 @@ function store () {
           context.commit('setDocument', document)
         })
       },
+      sort (context) {
+        context.commit('sort')
+      },
       addTask (context, task) {
         context.commit('addTask', task)
       },
-      toggleDoneTask (context, task) {
-        context.commit('toggleDoneTask', task)
+      toggleDoneTask (context, task, sort) {
+        context.commit('toggleDoneTask', task, sort)
+      },
+      deleteTask (context, task) {
+        context.commit('deleteTask', task)
       }
     }
   })

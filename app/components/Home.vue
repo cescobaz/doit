@@ -34,6 +34,7 @@
             orientation="horizontal"
           >
             <Label
+              id="done-label"
               text="done"
               style="text-size: 20"
               verticalAlignment="center"
@@ -86,8 +87,11 @@ export default {
       console.log(`Swipe started`);
       const {
         data: { swipeLimits },
-        swipeView
+        swipeView,
+        index
       } = eventData;
+      const doneLabel = swipeView.getViewById("done-label");
+      doneLabel.text = this.tasks[index].done ? "todo" : "done";
       const leftItem = swipeView.getViewById("done-view");
       const rightItem = swipeView.getViewById("delete-view");
       swipeLimits.left = leftItem.getMeasuredWidth();
@@ -101,13 +105,12 @@ export default {
     },
     onDonePressed(eventData) {
       const task = eventData.object.bindingContext;
-      this.$store.dispatch("toggleDoneTask", task);
+      this.$store.dispatch("toggleDoneTask", task, false);
       this.$refs.listView.notifySwipeToExecuteFinished();
     },
-    onDeletePressed({ object }) {
-      console.log("right action tapped");
-      // remove item
-      //       this.itemList.splice(this.itemList.indexOf(object.bindingContext), 1);
+    onDeletePressed(eventData) {
+      const task = eventData.object.bindingContext;
+      this.$store.dispatch("deleteTask", task);
       this.$refs.listView.notifySwipeToExecuteFinished();
     },
     chooseDocument() {
