@@ -1,6 +1,6 @@
 <template>
-  <Frame @shownModally="updateSaveActionItem">
-    <Page ref="page" @loaded="focus">
+  <Frame @shownModally="onShownModally">
+    <Page ref="page" @loaded="onLoaded">
       <ActionBar title="Task">
         <ActionItem
           ios.systemIcon="1"
@@ -18,7 +18,7 @@
       </ActionBar>
       <StackLayout>
         <TextField
-          v-model="description"
+          v-model="taskData.description"
           ref="descriptionTextField"
           class="description -border "
           hint="Write your todo +hint"
@@ -32,15 +32,18 @@
             :text="viewModel.label"
             flexGrow="1"
             :backgroundColor="
-              viewModel.selected ? viewModel.color : transparent
+              viewModel.value === taskData.priority
+                ? viewModel.color
+                : transparent
             "
             class="p-0 m-2 -outline"
-            :class="{ 'priority-button-selected': viewModel.selected }"
+            :class="{
+              'priority-button-selected': viewModel.value === taskData.priority
+            }"
             @tap="prioritySelected(viewModel)"
           />
         </FlexboxLayout>
         <Label :text="creationDateLocale" />
-        <Label text="none" />
       </StackLayout>
     </Page>
   </Frame>
@@ -59,33 +62,47 @@ function priorityViewModelMaker(priorities) {
       index,
       label: value,
       value,
-      color: colorForPriority(value),
-      selected: false
+      color: colorForPriority(value)
     };
   });
 }
 
 export default {
+  props: ["task"],
   data() {
     return {
-      done: false,
-      description: "",
-      creationDate: new Date(),
-      priority: null,
-      priorities: priorityViewModelMaker(["A", "B", "C", "D", "E"])
+      priorities: priorityViewModelMaker(["A", "B", "C", "D", "E"]),
+      taskData: {
+        done: false,
+        description: "",
+        creationDate: new Date(),
+        priority: null
+      }
     };
   },
   computed: {
     creationDateLocale() {
-      return DateTime.fromJSDate(this.creationDate).toFormat(
+      return DateTime.fromJSDate(this.taskData.creationDate).toFormat(
         todotxt.serializationDateFormat
       );
     },
     couldSave() {
-      return !!(this.description && this.description.trim().length > 0);
+      return !!(
+        this.taskData.description && this.taskData.description.trim().length > 0
+      );
     }
   },
   methods: {
+    onShownModally() {
+      this.updateSaveActionItem();
+    },
+    onLoaded() {
+      if (!this.task) {
+        return;
+      }
+      this.taskData = { ...this.task };
+      this.focus();
+    },
     focus() {
       this.$refs.descriptionTextField.nativeView.focus();
     },
@@ -96,14 +113,18 @@ export default {
       if (!this.couldSave) {
         return;
       }
-      const taskByParsing = todotxt.parseLine(this.description);
+      const taskByParsing = todotxt.parseLine(this.taskData.description);
       const task = {
         ...taskByParsing,
-        description: this.description,
-        creationDate: this.creationDate,
-        priority: this.priority
+        description: this.taskData.description,
+        creationDate: this.taskData.creationDate,
+        priority: this.taskData.priority
       };
-      this.$store.dispatch("addTask", task);
+      if (this.task) {
+        this.$store.dispatch("updateTask", this.task, task);
+      } else {
+        this.$store.dispatch("addTask", task);
+      }
       this.$modal.close();
     },
     updateSaveActionItem() {
@@ -131,11 +152,7 @@ export default {
       }
     },
     prioritySelected(viewModel) {
-      console.log("prioritySelected", viewModel);
-      this.priority = viewModel.value;
-      this.priorities.forEach(
-        (p, index) => (p.selected = p.index === viewModel.index)
-      );
+      this.taskData.priority = viewModel.value;
     }
   },
   watch: {

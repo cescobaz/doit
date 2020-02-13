@@ -28,6 +28,10 @@ function store () {
         state.tasks.sort(compare)
         this.commit('updateDocument')
       },
+      updateTask (state, task, updatedTask) {
+        Object.assign(task, updatedTask)
+        this.commit('updateDocument')
+      },
       toggleDoneTask (state, task, sort) {
         task.done = !task.done
         task.completionDate = task.done ? new Date() : null
@@ -57,6 +61,9 @@ function store () {
       },
       addTask (context, task) {
         context.commit('addTask', task)
+      },
+      updateTask (context, task, updatedTask) {
+        context.commit('updateTask', task, updatedTask)
       },
       toggleDoneTask (context, task, sort) {
         context.commit('toggleDoneTask', task, sort)

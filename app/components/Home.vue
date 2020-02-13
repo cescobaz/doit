@@ -16,10 +16,12 @@
     </ActionBar>
     <RadListView
       ref="listView"
-      for="task in tasks"
+      selectionBehavior="Press"
       swipeActions="true"
       @itemSwipeProgressStarted="onSwipeStarted"
       @itemSwipeProgressChanged="onSwipeChanged"
+      @itemSelected="onItemSelected"
+      for="task in tasks"
     >
       <v-template>
         <TaskRow :task="task" />
@@ -113,6 +115,13 @@ export default {
       this.$store.dispatch("deleteTask", task);
       this.$refs.listView.notifySwipeToExecuteFinished();
     },
+    onItemSelected(eventDate) {
+      const listView = this.$refs.listView;
+      const selectedTasks = listView.getSelectedItems();
+      if (Array.isArray(selectedTasks) && selectedTasks.length > 0) {
+        this.editTask(selectedTasks[0]);
+      }
+    },
     chooseDocument() {
       if (this.chooseDocumentToken) {
         return this.chooseDocumentToken(() => {
@@ -129,6 +138,9 @@ export default {
     },
     createTask() {
       this.$showModal(Task);
+    },
+    editTask(task) {
+      this.$showModal(Task, { props: { task } });
     }
   },
   components: {
