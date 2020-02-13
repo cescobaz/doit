@@ -1,33 +1,39 @@
 <template>
-  <StackLayout orientation="horizontal" class="row full-w-h">
-    <AbsoluteLayout :backgroundColor="priorityColor" width="4" height="100%" />
-    <StackLayout orientation="vertical" class="full-w-h">
-      <Label :text="dates" class="creation-date" />
+  <GridLayout columns="auto, *" class="row p-0 m-0">
+    <AbsoluteLayout
+      col="0"
+      :backgroundColor="priorityColor"
+      width="4"
+      height="100%"
+    />
+    <GridLayout col="1" rows="*,2*,*">
+      <Label row="0" :text="dates" class="creation-date" />
       <Label
+        row="1"
         :text="task.description"
-        textWrap="false"
         class="description"
         :class="descriptionClassName"
       />
-      <FlexboxLayout
-        justifyContent="flex-end"
-        flexWrap="wrap"
-        class="projectsAndContexts full-w-h"
+      <StackLayout
+        backgroundColor="#EE9900"
+        row="2"
+        orientation="horizontal"
+        class="p-0 m-0 pull-right"
       >
         <Label text="@placeholder" class="tags-placeholder" />
         <Label
           v-if="projects && projects.length"
           :text="projects"
-          class="projects"
+          class="tags"
         />
         <Label
           v-if="contexts && contexts.length"
           :text="contexts"
-          class="contexts"
+          class="tags"
         />
-      </FlexboxLayout>
-    </StackLayout>
-  </StackLayout>
+      </StackLayout>
+    </GridLayout>
+  </GridLayout>
 </template>
 
 <script>
@@ -87,9 +93,10 @@ export default {
   margin: 0;
 }
 .row {
-  background-color: #d4d4d4;
+  @include colorize($background-color: background);
 }
 .description {
+  width: 100%;
   font-size: 20;
 }
 .strike {
@@ -107,11 +114,9 @@ export default {
   background-color: white;
 }
 
-.projects,
-.contexts {
+.tags {
   background-color: gray;
   font-size: 16;
-  height: 30;
   color: white;
 }
 .projectsAndContexts {
