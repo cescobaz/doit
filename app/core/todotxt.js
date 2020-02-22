@@ -93,4 +93,4 @@ function serializeTask (task) {
   return `${done}${priority}${completionDate}${creationDate}${task.description}`
 }
 
-module.exports = { parse, parseLine, serialize, serializeTask, serializationDateFormat }
+module.exports = { parse, parseLine, serialize, serializeTask, serializationDateFormat, load }
