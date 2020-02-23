@@ -6,33 +6,15 @@
       width="4"
       height="100%"
     />
-    <GridLayout col="1" rows="*,2*,*">
-      <Label row="0" :text="dates" class="creation-date" />
+    <StackLayout col="1">
+      <Label :text="dates" class="details" />
       <Label
-        row="1"
         :text="task.description"
         class="description"
         :class="descriptionClassName"
       />
-      <StackLayout
-        backgroundColor="#EE9900"
-        row="2"
-        orientation="horizontal"
-        class="p-0 m-0 pull-right"
-      >
-        <Label text="@placeholder" class="tags-placeholder" />
-        <Label
-          v-if="projects && projects.length"
-          :text="projects"
-          class="tags"
-        />
-        <Label
-          v-if="contexts && contexts.length"
-          :text="contexts"
-          class="tags"
-        />
-      </StackLayout>
-    </GridLayout>
+      <Label :text="tags" class="details" />
+    </StackLayout>
   </GridLayout>
 </template>
 
@@ -68,9 +50,16 @@ export default {
       return colorForPriority(this.task.priority);
     },
     dates() {
-      return `${dateToLocaleString(
-        this.task.completionDate
-      )} - ${dateToLocaleString(this.task.creationDate)}`;
+      let dates = "";
+      const creationDate = dateToLocaleString(this.task.creationDate);
+      const completionDate = dateToLocaleString(this.task.completionDate);
+      if (this.task.creationDate) {
+        dates = creationDate + " ";
+      }
+      if (this.task.completionDate) {
+        dates += "-> " + completionDate;
+      }
+      return dates;
     },
     contexts() {
       if (!this.task.contexts) {
@@ -83,6 +72,11 @@ export default {
         return "";
       }
       return this.task.projects.join(" ");
+    },
+    tags() {
+      return [this.projects, this.contexts]
+        .filter(value => Boolean(value))
+        .join(" ");
     }
   }
 };
@@ -94,10 +88,6 @@ export default {
 // Custom styles
 .fas {
   @include colorize($color: accent);
-}
-.full-w-h {
-  padding: 0;
-  margin: 0;
 }
 .row {
   @include colorize($background-color: background);
@@ -111,30 +101,19 @@ export default {
 }
 
 .description {
-  width: 100%;
   font-size: 20;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 .strike {
   text-decoration: line-through;
 }
-.priority {
-  font-size: 20;
-}
-.creation-date {
-  text-align: right;
-  width: 100%;
-}
-.tags-placeholder {
-  color: white;
-  background-color: white;
-}
 
-.tags {
-  background-color: gray;
-  font-size: 16;
-  color: white;
-}
-.projectsAndContexts {
+.details {
+  font-size: 12;
+  text-align: left;
   width: 100%;
+  height: 40px;
 }
 </style>

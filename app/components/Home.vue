@@ -18,6 +18,8 @@
       ref="listView"
       swipeActions="true"
       @itemSwipeProgressStarted="onSwipeStarted"
+      @scrollStarted="onScrollStarted"
+      @scrollEnded="onScrollEnded"
       for="(task, index) in tasks"
     >
       <v-template>
@@ -105,7 +107,16 @@ export default {
       this.$refs.listView.notifySwipeToExecuteFinished();
       this.$data.swiping = false;
     },
+    onScrollStarted() {
+      this.$data.scrolling = true;
+    },
+    onScrollEnded() {
+      this.$data.scrolling = false;
+    },
     onTap({ index }) {
+      if (this.$data.scrolling) {
+        return;
+      }
       const listView = this.$refs.listView;
       if (this.$data.swiping) {
         this.$refs.listView.notifySwipeToExecuteFinished();
