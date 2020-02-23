@@ -21,6 +21,7 @@ function trimOrNull (text) {
   }
   return text.trim()
 }
+
 function dateFromString (text) {
   if (!text) {
     return null
