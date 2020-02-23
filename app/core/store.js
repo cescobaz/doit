@@ -1,5 +1,4 @@
 const Vuex = require('vuex')
-const { chooseDocument } = require('./file-ios')
 const { loadDocument } = require('./document-ios')
 const { compare } = require('./todotxt-presenter')
 
@@ -28,9 +27,9 @@ function store () {
         state.tasks.sort(compare)
         this.commit('updateDocument')
       },
-      updateTask (state, task, updatedTask) {
+      updateTask (state, { task, updatedTask }) {
         Object.assign(task, updatedTask)
-        this.commit('updateDocument')
+        this.commit('updateDocument', task)
       },
       toggleDoneTask (state, task, sort) {
         task.done = !task.done
@@ -62,8 +61,8 @@ function store () {
       addTask (context, task) {
         context.commit('addTask', task)
       },
-      updateTask (context, task, updatedTask) {
-        context.commit('updateTask', task, updatedTask)
+      updateTask (context, { task, updatedTask }) {
+        context.commit('updateTask', { task, updatedTask })
       },
       toggleDoneTask (context, task, sort) {
         context.commit('toggleDoneTask', task, sort)
