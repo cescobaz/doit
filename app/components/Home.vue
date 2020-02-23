@@ -16,15 +16,12 @@
     </ActionBar>
     <RadListView
       ref="listView"
-      selectionBehavior="Press"
       swipeActions="true"
       @itemSwipeProgressStarted="onSwipeStarted"
-      @itemSwipeProgressChanged="onSwipeChanged"
-      @itemSelected="onItemSelected"
-      for="task in tasks"
+      for="(task, index) in tasks"
     >
       <v-template>
-        <TaskRow :task="task" />
+        <TaskRow :task="task" :tap="onTap" :index="index" />
       </v-template>
       <v-template name="itemswipe">
         <GridLayout columns="*,*, *, *" class="swipe">
@@ -71,7 +68,8 @@ import TaskRow from "./TaskRow";
 export default {
   data() {
     return {
-      chooseDocumentToken: null
+      chooseDocumentToken: null,
+      swiping: false
     };
   },
   computed: {
@@ -80,13 +78,8 @@ export default {
     }
   },
   methods: {
-    updateSwipeAction(eventData) {
-      const { data, swipeView } = eventData;
-      const { x } = data;
-      console.log("x", data);
-    },
     onSwipeStarted(eventData) {
-      console.log(`Swipe started`);
+      this.$data.swiping = true;
       const {
         data: { swipeLimits },
         swipeView,
@@ -98,29 +91,29 @@ export default {
       const rightItem = swipeView.getViewById("delete-view");
       swipeLimits.left = leftItem.getMeasuredWidth();
       swipeLimits.right = rightItem.getMeasuredWidth();
-      swipeLimits.threshold = leftItem.getMeasuredWidth() / 2;
-      this.updateSwipeAction(eventData);
-    },
-    onSwipeChanged(eventData) {
-      console.log("onSwipeChanged");
-      this.updateSwipeAction(eventData);
+      swipeLimits.threshold = 1;
     },
     onDonePressed(eventData) {
       const task = eventData.object.bindingContext;
       this.$store.dispatch("toggleDoneTask", task, false);
       this.$refs.listView.notifySwipeToExecuteFinished();
+      this.$data.swiping = false;
     },
     onDeletePressed(eventData) {
       const task = eventData.object.bindingContext;
       this.$store.dispatch("deleteTask", task);
       this.$refs.listView.notifySwipeToExecuteFinished();
+      this.$data.swiping = false;
     },
-    onItemSelected(eventDate) {
+    onTap({ index }) {
       const listView = this.$refs.listView;
-      const selectedTasks = listView.getSelectedItems();
-      if (Array.isArray(selectedTasks) && selectedTasks.length > 0) {
-        this.editTask(selectedTasks[0]);
+      if (this.$data.swiping) {
+        this.$refs.listView.notifySwipeToExecuteFinished();
+        this.$data.swiping = false;
+        return;
       }
+      const task = this.tasks[index];
+      this.editTask(task);
     },
     chooseDocument() {
       if (this.chooseDocumentToken) {

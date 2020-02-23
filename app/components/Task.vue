@@ -121,7 +121,10 @@ export default {
         priority: this.taskData.priority
       };
       if (this.task) {
-        this.$store.dispatch("updateTask", this.task, task);
+        this.$store.dispatch("updateTask", {
+          task: this.task,
+          updatedTask: task
+        });
       } else {
         this.$store.dispatch("addTask", task);
       }

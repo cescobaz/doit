@@ -1,5 +1,5 @@
 <template>
-  <GridLayout columns="auto, *" class="row p-0 m-0">
+  <GridLayout columns="auto, *" class="row p-0 m-0" @tap="onTap">
     <AbsoluteLayout
       col="0"
       :backgroundColor="priorityColor"
@@ -49,9 +49,16 @@ function dateToLocaleString(date) {
 }
 
 export default {
-  props: ["task"],
+  props: ["task", "tap", "index"],
   data() {
     return {};
+  },
+  methods: {
+    onTap() {
+      if (this.tap) {
+        this.tap({ task: this.task, index: this.index });
+      }
+    }
   },
   computed: {
     descriptionClassName() {
@@ -95,6 +102,14 @@ export default {
 .row {
   @include colorize($background-color: background);
 }
+
+.ios ListView,
+.ios RadListView,
+.ios .list-item,
+.ios .rlv-item {
+  background-color: #f1f1eb;
+}
+
 .description {
   width: 100%;
   font-size: 20;
