@@ -3,17 +3,23 @@
     <AbsoluteLayout
       col="0"
       :backgroundColor="priorityColor"
-      width="4"
+      width="8"
       height="100%"
+      class="p-0 m-0"
     />
-    <StackLayout col="1">
-      <Label :text="dates" class="details" />
+    <StackLayout col="1" class="p-0 m-0">
+      <Label :text="dates" class="footnote details p-t-5" />
       <Label
         :text="task.description"
-        class="description"
+        class="body description"
         :class="descriptionClassName"
       />
-      <Label :text="tags" class="details" />
+      <Label :text="tags" class="footnote details p-b-5" />
+      <StackLayout
+        height="1"
+        :class="{ separator: !last, background: last }"
+        class="p-0 m-0"
+      />
     </StackLayout>
   </GridLayout>
 </template>
@@ -31,7 +37,7 @@ function dateToLocaleString(date) {
 }
 
 export default {
-  props: ["task", "tap", "index"],
+  props: ["task", "tap", "index", "last"],
   data() {
     return {};
   },
@@ -85,33 +91,28 @@ export default {
 <style scoped lang="scss">
 @import "~@nativescript/theme/scss/variables/blue";
 
-// Custom styles
-.fas {
-  @include colorize($color: accent);
-}
 .row {
   @include colorize($background-color: background);
+  width: 100%;
 }
-
-.ios ListView,
-.ios RadListView,
-.ios .list-item,
-.ios .rlv-item {
-  background-color: #f1f1eb;
+.separator {
+  @include colorize($background-color: secondary background 20%);
 }
-
+.background {
+  @include colorize($background-color: background);
+}
 .description {
-  font-size: 20;
+  @include colorize($color: primary);
   width: 100%;
   margin: 0;
   padding: 0;
 }
 .strike {
   text-decoration: line-through;
+  @include colorize($color: secondary);
 }
-
 .details {
-  font-size: 12;
+  @include colorize($color: secondary);
   text-align: left;
   width: 100%;
   height: 40px;

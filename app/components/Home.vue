@@ -23,7 +23,12 @@
       for="(task, index) in tasks"
     >
       <v-template>
-        <TaskRow :task="task" :tap="onTap" :index="index" />
+        <TaskRow
+          :task="task"
+          :last="index == tasks.length - 1"
+          :tap="onTap"
+          :index="index"
+        />
       </v-template>
       <v-template name="itemswipe">
         <GridLayout columns="*,*, *, *" class="swipe">
@@ -97,15 +102,15 @@ export default {
     },
     onDonePressed(eventData) {
       const task = eventData.object.bindingContext;
-      this.$store.dispatch("toggleDoneTask", task, false);
       this.$refs.listView.notifySwipeToExecuteFinished();
       this.$data.swiping = false;
+      this.$store.dispatch("toggleDoneTask", task, false);
     },
     onDeletePressed(eventData) {
       const task = eventData.object.bindingContext;
-      this.$store.dispatch("deleteTask", task);
       this.$refs.listView.notifySwipeToExecuteFinished();
       this.$data.swiping = false;
+      this.$store.dispatch("deleteTask", task);
     },
     onScrollStarted() {
       this.$data.scrolling = true;

@@ -20,7 +20,7 @@
         <TextField
           v-model="taskData.description"
           ref="descriptionTextField"
-          class="description -border "
+          class="description -border"
           hint="Write your todo +hint"
           returnKeyType="done"
           @returnPress="save"
@@ -97,11 +97,11 @@ export default {
       this.updateSaveActionItem();
     },
     onLoaded() {
+      this.focus();
       if (!this.task) {
         return;
       }
       this.taskData = { ...this.task };
-      this.focus();
     },
     focus() {
       this.$refs.descriptionTextField.nativeView.focus();
@@ -169,11 +169,8 @@ export default {
 <style scoped lang="scss">
 @import "~@nativescript/theme/scss/variables/blue";
 
-// Custom styles
-.fas {
-  @include colorize($color: accent);
-}
 .description {
+  @include colorize($color: primary);
   font-size: 30;
   padding: 20;
 }
