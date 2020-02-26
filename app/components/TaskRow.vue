@@ -8,13 +8,13 @@
       class="p-0 m-0"
     />
     <StackLayout col="1" class="p-0 m-0">
-      <Label :text="dates" class="footnote details p-t-5" />
+      <Label :text="dates" class="footnote details p-t-5 p-x-5" />
       <Label
         :text="task.description"
-        class="body description"
+        class="body description p-x-5"
         :class="descriptionClassName"
       />
-      <Label :text="tags" class="footnote details p-b-5" />
+      <Label :text="tags" class="footnote details p-b-5 p-x-5" />
       <StackLayout
         height="1"
         :class="{ separator: !last, background: last }"
@@ -25,67 +25,67 @@
 </template>
 
 <script>
-import todotxt from "../core/todotxt";
-import { DateTime } from "luxon";
-import { colorForPriority } from "../core/todotxt-presenter";
+import todotxt from '../core/todotxt'
+import { DateTime } from 'luxon'
+import { colorForPriority } from '../core/todotxt-presenter'
 
-function dateToLocaleString(date) {
+function dateToLocaleString (date) {
   if (!date) {
-    return "";
+    return ''
   }
-  return DateTime.fromJSDate(date).toFormat(todotxt.serializationDateFormat);
+  return DateTime.fromJSDate(date).toFormat(todotxt.serializationDateFormat)
 }
 
 export default {
-  props: ["task", "tap", "index", "last"],
-  data() {
-    return {};
+  props: ['task', 'tap', 'index', 'last'],
+  data () {
+    return {}
   },
   methods: {
-    onTap() {
+    onTap () {
       if (this.tap) {
-        this.tap({ task: this.task, index: this.index });
+        this.tap({ task: this.task, index: this.index })
       }
     }
   },
   computed: {
-    descriptionClassName() {
-      return this.task && this.task.done ? "strike" : null;
+    descriptionClassName () {
+      return this.task && this.task.done ? 'strike' : null
     },
-    priorityColor() {
-      return colorForPriority(this.task.priority);
+    priorityColor () {
+      return colorForPriority(this.task.priority)
     },
-    dates() {
-      let dates = "";
-      const creationDate = dateToLocaleString(this.task.creationDate);
-      const completionDate = dateToLocaleString(this.task.completionDate);
+    dates () {
+      let dates = ''
+      const creationDate = dateToLocaleString(this.task.creationDate)
+      const completionDate = dateToLocaleString(this.task.completionDate)
       if (this.task.creationDate) {
-        dates = creationDate + " ";
+        dates = creationDate + ' '
       }
       if (this.task.completionDate) {
-        dates += "-> " + completionDate;
+        dates += '-> ' + completionDate
       }
-      return dates;
+      return dates
     },
-    contexts() {
+    contexts () {
       if (!this.task.contexts) {
-        return "";
+        return ''
       }
-      return this.task.contexts.join(" ");
+      return this.task.contexts.join(' ')
     },
-    projects() {
+    projects () {
       if (!this.task.projects) {
-        return "";
+        return ''
       }
-      return this.task.projects.join(" ");
+      return this.task.projects.join(' ')
     },
-    tags() {
+    tags () {
       return [this.projects, this.contexts]
         .filter(value => Boolean(value))
-        .join(" ");
+        .join(' ')
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
@@ -96,7 +96,7 @@ export default {
   width: 100%;
 }
 .separator {
-  @include colorize($background-color: secondary background 20%);
+  @include colorize($background-color: secondary);
 }
 .background {
   @include colorize($background-color: background);
@@ -118,5 +118,6 @@ export default {
   height: 40px;
   margin: 0;
   padding: 0;
+  font-size: const($font-size);
 }
 </style>

@@ -68,94 +68,93 @@
 </template>
 
 <script>
-import Task from "./Task";
-import { chooseDocument } from "../core/file-ios";
-import TaskRow from "./TaskRow";
+import Task from './Task'
+import { chooseDocument } from '../core/file-ios'
+import TaskRow from './TaskRow'
 
 export default {
-  data() {
+  data () {
     return {
       chooseDocumentToken: null,
       swiping: false
-    };
+    }
   },
   computed: {
-    tasks() {
-      return this.$store.state.tasks;
+    tasks () {
+      return this.$store.state.tasks
     }
   },
   methods: {
-    onSwipeStarted(eventData) {
-      this.$data.swiping = true;
+    onSwipeStarted (eventData) {
+      this.$data.swiping = true
       const {
         data: { swipeLimits },
         swipeView,
         index
-      } = eventData;
-      const doneLabel = swipeView.getViewById("done-label");
-      doneLabel.text = this.tasks[index].done ? "todo" : "done";
-      const leftItem = swipeView.getViewById("done-view");
-      const rightItem = swipeView.getViewById("delete-view");
-      swipeLimits.left = leftItem.getMeasuredWidth();
-      swipeLimits.right = rightItem.getMeasuredWidth();
-      swipeLimits.threshold = 1;
+      } = eventData
+      const doneLabel = swipeView.getViewById('done-label')
+      doneLabel.text = this.tasks[index].done ? 'todo' : 'done'
+      const leftItem = swipeView.getViewById('done-view')
+      const rightItem = swipeView.getViewById('delete-view')
+      swipeLimits.left = leftItem.getMeasuredWidth()
+      swipeLimits.right = rightItem.getMeasuredWidth()
+      swipeLimits.threshold = 1
     },
-    onDonePressed(eventData) {
-      const task = eventData.object.bindingContext;
-      this.$refs.listView.notifySwipeToExecuteFinished();
-      this.$data.swiping = false;
-      this.$store.dispatch("toggleDoneTask", task, false);
+    onDonePressed (eventData) {
+      const task = eventData.object.bindingContext
+      this.$refs.listView.notifySwipeToExecuteFinished()
+      this.$data.swiping = false
+      this.$store.dispatch('toggleDoneTask', task, false)
     },
-    onDeletePressed(eventData) {
-      const task = eventData.object.bindingContext;
-      this.$refs.listView.notifySwipeToExecuteFinished();
-      this.$data.swiping = false;
-      this.$store.dispatch("deleteTask", task);
+    onDeletePressed (eventData) {
+      const task = eventData.object.bindingContext
+      this.$refs.listView.notifySwipeToExecuteFinished()
+      this.$data.swiping = false
+      this.$store.dispatch('deleteTask', task)
     },
-    onScrollStarted() {
-      this.$data.scrolling = true;
+    onScrollStarted () {
+      this.$data.scrolling = true
     },
-    onScrollEnded() {
-      this.$data.scrolling = false;
+    onScrollEnded () {
+      this.$data.scrolling = false
     },
-    onTap({ index }) {
+    onTap ({ index }) {
       if (this.$data.scrolling) {
-        return;
+        return
       }
-      const listView = this.$refs.listView;
       if (this.$data.swiping) {
-        this.$refs.listView.notifySwipeToExecuteFinished();
-        this.$data.swiping = false;
-        return;
+        this.$refs.listView.notifySwipeToExecuteFinished()
+        this.$data.swiping = false
+        return
       }
-      const task = this.tasks[index];
-      this.editTask(task);
+      const task = this.tasks[index]
+      this.editTask(task)
     },
-    chooseDocument() {
+    chooseDocument () {
       if (this.chooseDocumentToken) {
         return this.chooseDocumentToken(() => {
-          this.chooseDocumentToken = null;
-          this.chooseDocument();
-        });
+          this.chooseDocumentToken = null
+          this.chooseDocument()
+        })
       }
       this.chooseDocumentToken = chooseDocument(document => {
         if (!document) {
-          return;
+          return
         }
-        this.$store.commit("setDocument", document);
-      });
+        this.$store.commit('setDocument', document)
+      })
     },
-    createTask() {
-      this.$showModal(Task);
+    createTask () {
+      this.$showModal(Task)
     },
-    editTask(task) {
-      this.$showModal(Task, { props: { task } });
+    editTask (task) {
+      this.$showModal(Task, { props: { task } })
     }
   },
   components: {
     TaskRow
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

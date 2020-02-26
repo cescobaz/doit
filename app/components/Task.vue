@@ -43,96 +43,96 @@
             @tap="prioritySelected(viewModel)"
           />
         </FlexboxLayout>
-        <Label :text="creationDateLocale" />
+        <Label :text="creationDateLocale" class="body" />
       </StackLayout>
     </Page>
   </Frame>
 </template>
 
 <script>
-import { isIOS, isAndroid } from "platform";
-import todotxt from "../core/todotxt";
-import { DateTime } from "luxon";
-import { colorForPriority } from "../core/todotxt-presenter";
+import { isIOS, isAndroid } from 'platform'
+import todotxt from '../core/todotxt'
+import { DateTime } from 'luxon'
+import { colorForPriority } from '../core/todotxt-presenter'
 
-function priorityViewModelMaker(priorities) {
+function priorityViewModelMaker (priorities) {
   return priorities.map((priority, index) => {
-    const value = `(${priority})`;
+    const value = `(${priority})`
     return {
       index,
       label: value,
       value,
       color: colorForPriority(value)
-    };
-  });
+    }
+  })
 }
 
 export default {
-  props: ["task"],
-  data() {
+  props: ['task'],
+  data () {
     return {
-      priorities: priorityViewModelMaker(["A", "B", "C", "D", "E"]),
+      priorities: priorityViewModelMaker(['A', 'B', 'C', 'D', 'E']),
       taskData: {
         done: false,
-        description: "",
+        description: '',
         creationDate: new Date(),
         priority: null
       }
-    };
+    }
   },
   computed: {
-    creationDateLocale() {
+    creationDateLocale () {
       return DateTime.fromJSDate(this.taskData.creationDate).toFormat(
         todotxt.serializationDateFormat
-      );
+      )
     },
-    couldSave() {
+    couldSave () {
       return !!(
         this.taskData.description && this.taskData.description.trim().length > 0
-      );
+      )
     }
   },
   methods: {
-    onShownModally() {
-      this.updateSaveActionItem();
+    onShownModally () {
+      this.updateSaveActionItem()
     },
-    onLoaded() {
-      this.focus();
+    onLoaded () {
+      this.focus()
       if (!this.task) {
-        return;
+        return
       }
-      this.taskData = { ...this.task };
+      this.taskData = { ...this.task }
     },
-    focus() {
-      this.$refs.descriptionTextField.nativeView.focus();
+    focus () {
+      this.$refs.descriptionTextField.nativeView.focus()
     },
-    cancel() {
-      this.$modal.close();
+    cancel () {
+      this.$modal.close()
     },
-    save() {
+    save () {
       if (!this.couldSave) {
-        return;
+        return
       }
-      const taskByParsing = todotxt.parseLine(this.taskData.description);
+      const taskByParsing = todotxt.parseLine(this.taskData.description)
       const task = {
         ...taskByParsing,
         description: this.taskData.description,
         creationDate: this.taskData.creationDate,
         priority: this.taskData.priority
-      };
+      }
       if (this.task) {
-        this.$store.dispatch("updateTask", {
+        this.$store.dispatch('updateTask', {
           task: this.task,
           updatedTask: task
-        });
+        })
       } else {
-        this.$store.dispatch("addTask", task);
+        this.$store.dispatch('addTask', task)
       }
-      this.$modal.close();
+      this.$modal.close()
     },
-    updateSaveActionItem() {
+    updateSaveActionItem () {
       if (isIOS) {
-        const page = this.$refs.page;
+        const page = this.$refs.page
         if (
           !(
             page &&
@@ -142,28 +142,28 @@ export default {
             page.nativeView.ios.navigationItem.rightBarButtonItem
           )
         ) {
-          return;
+          return
         }
-        page.nativeView.ios.navigationItem.rightBarButtonItem.enabled = this.couldSave;
+        page.nativeView.ios.navigationItem.rightBarButtonItem.enabled = this.couldSave
       }
       if (isAndroid) {
-        const actionItem = this.$refs.saveActionItem.nativeView;
+        const actionItem = this.$refs.saveActionItem.nativeView
         actionItem.actionBar.nativeViewProtected
           .getMenu()
           .findItem(actionItem._getItemId())
-          .setEnabled(this.couldSave);
+          .setEnabled(this.couldSave)
       }
     },
-    prioritySelected(viewModel) {
-      this.taskData.priority = viewModel.value;
+    prioritySelected (viewModel) {
+      this.taskData.priority = viewModel.value
     }
   },
   watch: {
-    couldSave() {
-      this.updateSaveActionItem();
+    couldSave () {
+      this.updateSaveActionItem()
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
