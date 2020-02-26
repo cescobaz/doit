@@ -44,6 +44,7 @@
           />
         </FlexboxLayout>
         <Label :text="creationDateLocale" class="body" />
+        <Label :text="taskData.description" textWrap="true" class="body" />
       </StackLayout>
     </Page>
   </Frame>

@@ -29,7 +29,8 @@ function store () {
       },
       updateTask (state, { task, updatedTask }) {
         Object.assign(task, updatedTask)
-        this.commit('updateDocument', task)
+        state.tasks.sort(compare)
+        this.commit('updateDocument')
       },
       toggleDoneTask (state, task, sort) {
         task.done = !task.done

@@ -1,13 +1,12 @@
 <template>
-  <GridLayout columns="auto, *" class="row p-0 m-0" @tap="onTap">
+  <StackLayout orientation="horizontal" class="row" @tap="onTap">
     <AbsoluteLayout
-      col="0"
       :backgroundColor="priorityColor"
       width="8"
       height="100%"
       class="p-0 m-0"
     />
-    <StackLayout col="1" class="p-0 m-0">
+    <StackLayout class="p-0 m-0">
       <Label :text="dates" class="footnote details p-t-5 p-x-5" />
       <Label
         :text="task.description"
@@ -21,7 +20,7 @@
         class="p-0 m-0"
       />
     </StackLayout>
-  </GridLayout>
+  </StackLayout>
 </template>
 
 <script>
@@ -93,7 +92,10 @@ export default {
 
 .row {
   @include colorize($background-color: background);
+  padding: 0;
+  margin: 0;
   width: 100%;
+  /*height: 60;*/
 }
 .separator {
   @include colorize($background-color: secondary);
