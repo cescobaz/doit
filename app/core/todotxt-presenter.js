@@ -32,7 +32,16 @@ function contexts (tasks) {
 }
 
 function tags (key, tasks) {
-
+  if (!Array.isArray(tasks) || tasks.length === 0) {
+    return []
+  }
+  return tasks.reduce((tags, task) => {
+    const taskTags = task[key]
+    if (!(Array.isArray(taskTags) && taskTags.length !== 0)) {
+      return tags
+    }
+    return tags.concat(taskTags)
+  }, [])
 }
 
 function indexForPriority (priority, maxPriorityIndex = 7) {
