@@ -1,12 +1,19 @@
-<template>
-  <StackLayout orientation="horizontal" class="row" @tap="onTap">
+<template itemHeight="60">
+  <StackLayout
+    dynamicItemSize="false"
+    itemHeight="60"
+    height="60"
+    orientation="horizontal"
+    class="row"
+    @tap="onTap"
+  >
     <AbsoluteLayout
       :backgroundColor="priorityColor"
       width="8"
-      height="100%"
       class="p-0 m-0"
+      verticalAlignment="stretch"
     />
-    <StackLayout class="p-0 m-0">
+    <StackLayout class="p-0 m-0" verticalAlignment="stretch">
       <Label :text="dates" class="footnote details p-t-5 p-x-5" />
       <Label
         :text="task.description"
@@ -95,7 +102,7 @@ export default {
   padding: 0;
   margin: 0;
   width: 100%;
-  /*height: 60;*/
+  overflow: hidden;
 }
 .separator {
   @include colorize($background-color: secondary);
