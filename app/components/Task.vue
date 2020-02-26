@@ -43,6 +43,8 @@
             @tap="prioritySelected(viewModel)"
           />
         </FlexboxLayout>
+        <Label :text="projectsString" textWrap="true" class="body" />
+        <Label :text="contextsString" textWrap="true" class="body" />
         <Label :text="creationDateLocale" class="body" />
         <Label :text="taskData.description" textWrap="true" class="body" />
       </StackLayout>
@@ -78,7 +80,10 @@ export default {
         description: '',
         creationDate: new Date(),
         priority: null
-      }
+      },
+      parsedTask: {},
+      projectsString: '',
+      contextsString: ''
     }
   },
   computed: {
@@ -114,9 +119,8 @@ export default {
       if (!this.couldSave) {
         return
       }
-      const taskByParsing = todotxt.parseLine(this.taskData.description)
       const task = {
-        ...taskByParsing,
+        ...this.$data.parsedTask,
         description: this.taskData.description,
         creationDate: this.taskData.creationDate,
         priority: this.taskData.priority
@@ -160,6 +164,18 @@ export default {
     }
   },
   watch: {
+    'taskData.description': function (description) {
+      const parsedTask = todotxt.parseLine(description)
+      this.$data.parsedTask = parsedTask
+      const { projects, contexts } = parsedTask
+      if (Array.isArray(projects)) {
+        this.$data.projectsString = projects.join(' ')
+      }
+      if (Array.isArray(contexts)) {
+        this.$data.contextsString = contexts.join(' ')
+      }
+      console.log('wee', this.$data.projectsString)
+    },
     couldSave () {
       this.updateSaveActionItem()
     }
